@@ -1,7 +1,7 @@
 language: csharp
 solution: PayBitForward.sln
 install:
-  - nuget restore solution-name.sln
+  - nuget restore PayBitForward.sln
   - nuget install NUnit.ConsoleRunner -Version 3.7.0 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release PayBitForward.sln
