@@ -45,10 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MessageType.cs" />
-    <Compile Include="IMessageConverter.cs" />
-    <Compile Include="JsonMessageConverter.cs" />
-    <Compile Include="Message.cs" />
+    <Compile Include="Conversions\IMessageConverter.cs" />
+    <Compile Include="Conversions\JsonMessageConverter.cs" />
+    <Compile Include="Messages\Message.cs" />
+    <Compile Include="Messages\MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
