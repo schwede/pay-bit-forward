@@ -14,7 +14,7 @@ namespace UnitTests
 
             var converter = new JsonMessageConverter<Message>();
 
-            var blob = converter.Serialize(chunkReq);
+            var blob = System.Text.Encoding.UTF8.GetString(converter.Serialize(chunkReq));
 
             var expected = string.Format("{{\"ConversationId\":\"{0}\",\"MessageId\":{1}}}", guid.ToString(), (int)MessageType.CHUNK_REQUEST);
             Assert.AreEqual(expected, blob);
@@ -28,7 +28,7 @@ namespace UnitTests
             var converter = new JsonMessageConverter<Message>();
 
             var blob = string.Format("{{ \"ConversationId\" : \"{0}\", \"MessageId\" : {1} }}", guid.ToString(), (int)MessageType.CHUNK_REQUEST);
-            var message = converter.DeSerialize(blob);
+            var message = converter.DeSerialize(System.Text.Encoding.UTF8.GetBytes(blob));
 
             Assert.AreEqual(guid, message.ConversationId);
             Assert.AreEqual(MessageType.CHUNK_REQUEST, message.MessageId);

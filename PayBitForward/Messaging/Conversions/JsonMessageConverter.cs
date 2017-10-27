@@ -1,17 +1,18 @@
 ﻿using Newtonsoft.Json;
+using System.Text;
 
 namespace PayBitForward.Messaging
 {
     public class JsonMessageConverter<T> : IMessageConverter<T> where T : Message
     {
-        public string Serialize(T message)
+        public byte[] Serialize(T message)
         {
-            return JsonConvert.SerializeObject(message);
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
         }
 
-        public T DeSerialize(string blob)
+        public T DeSerialize(byte[] blob)
         {
-            return JsonConvert.DeserializeObject<T>(blob);
+            return JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(blob));
         }
     }
 }
