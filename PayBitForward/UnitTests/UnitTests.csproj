@@ -37,6 +37,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messaging\Communications\TestMessageRouter.cs" />
+    <Compile Include="Messaging\Communications\TestUdpCommunicator.cs" />
     <Compile Include="Messaging\Conversions\TestJsonMessageConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -4,14 +4,12 @@ namespace PayBitForward.Messaging
 {
     public class Message
     {
-        public Guid ConversationId { get; set; }
+        public Guid SenderId { get; set; }
 
         public MessageType MessageId { get; set; }
 
-        public Message(MessageType messageId, Guid convoId)
-        {
-            ConversationId = convoId;
-            MessageId = messageId;
-        }
+        public Guid ConversationId { get; set; }
+
+        public int MessageCount { get; set; }
     }
 }

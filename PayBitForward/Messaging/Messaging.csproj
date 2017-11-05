@@ -45,6 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Communications\IConverser.cs" />
+    <Compile Include="Communications\Envelope.cs" />
+    <Compile Include="Communications\INetworkCommunicator.cs" />
+    <Compile Include="Communications\MessageRouter.cs" />
+    <Compile Include="Communications\UdpCommunicator.cs" />
     <Compile Include="Conversions\IMessageConverter.cs" />
     <Compile Include="Conversions\JsonMessageConverter.cs" />
     <Compile Include="Messages\Message.cs" />
