@@ -15,16 +15,11 @@ namespace PayBitForward.Messaging
         /// </summary>
         public Byte[] ContentHash { get; set; }
 
-        /// <summary>
-        /// Specifies the requester so the seeder knows the origin
-        /// </summary>
-        public Guid ProcessID { get; set; }
-
-        public ChunkRequest(MessageType messageId, Guid convoId, int index, Byte[] contentHash, Guid processID) : base(messageId, convoId)
+        public ChunkRequest(Guid senderId, Guid convoId, int mesgCount, int index, Byte[] contentHash, Guid processID) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.CHUNK_REQUEST;
             Index = index;
             ContentHash = contentHash;
-            ProcessID = processID;
         }
     }
 }

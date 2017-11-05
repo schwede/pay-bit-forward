@@ -1,10 +1,10 @@
 ﻿
 namespace PayBitForward.Messaging
 {
-    public interface IMessageConverter<T> where T : Message                                  
+    public interface IMessageConverter                               
     {
-        byte[] Serialize(T message);
+        byte[] Serialize(Message message);
 
-        T DeSerialize(byte[] blob);
+        Message DeSerialize(byte[] blob);
     }
 }

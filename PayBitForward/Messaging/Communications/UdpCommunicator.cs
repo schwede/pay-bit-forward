@@ -30,7 +30,7 @@ namespace PayBitForward.Messaging
 
         public static int Timeout { get; private set; }
 
-        private IMessageConverter<Message> Converter { get; set; }
+        private IMessageConverter Converter { get; set; }
 
         private CancellationTokenSource CancelSource { get; set; }
 
@@ -40,7 +40,7 @@ namespace PayBitForward.Messaging
 
         private IPEndPoint _endPoint;
 
-        public UdpCommunicator(IPEndPoint endPoint, IMessageConverter<Message> converter)
+        public UdpCommunicator(IPEndPoint endPoint, IMessageConverter converter)
         {
             _endPoint = endPoint;
             Converter = converter;

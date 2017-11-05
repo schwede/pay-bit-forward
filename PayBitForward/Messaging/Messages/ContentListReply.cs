@@ -11,8 +11,9 @@ namespace PayBitForward.Messaging
         /// </summary>
         public List<Content> ContentList { get; set; }
 
-        public ContentListReply(MessageType messageId, Guid convoId, List<Content> contentList) : base(messageId, convoId)
+        public ContentListReply(Guid senderId, Guid convoId, int mesgCount, List<Content> contentList) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.CONTENT_LIST_REPLY;
             ContentList = contentList;
         }
     }

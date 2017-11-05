@@ -14,9 +14,9 @@ namespace PayBitForward.Messaging
         /// </summary>
         public string ContentQuery { get; set; }
 
-        public ContentListRequest(MessageType messageId, Guid convoId, Guid processId, string contentQuery) : base(messageId, convoId)
+        public ContentListRequest(Guid senderId, Guid convoId, int mesgCount, string contentQuery) : base(senderId, convoId, mesgCount)
         {
-            ProcessID = processId;
+            MessageId = MessageType.CONTENT_LIST_REQUEST;
             ContentQuery = contentQuery;
         }
     }

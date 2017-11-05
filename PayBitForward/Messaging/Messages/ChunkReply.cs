@@ -10,8 +10,9 @@ namespace PayBitForward.Messaging
         /// </summary>
         public Byte[] ChunkData { get; set; }
 
-        public ChunkReply(MessageType messageId, Guid convoId, Byte[] chunkData) : base(messageId, convoId)
+        public ChunkReply(Guid senderId, Guid convoId, int mesgCount, Byte[] chunkData) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.CHUNK_REPLY;
             ChunkData = chunkData;
         }
     }

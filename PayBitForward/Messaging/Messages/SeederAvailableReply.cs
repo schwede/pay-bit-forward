@@ -7,10 +7,11 @@ namespace PayBitForward.Messaging
         /// <summary>
         /// State that describes the seeder’s readiness to server content
         /// </summary>
-        public Byte ReadyState { get; set; }
+        public byte ReadyState { get; set; }
 
-        public SeederAvailableReply(MessageType messageId, Guid convoId, Byte readyState) : base(messageId, convoId)
+        public SeederAvailableReply(Guid senderId, Guid convoId, int mesgCount, byte readyState) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.SEEDER_AVAILABLE_REQUEST;
             ReadyState = readyState;
         }
     }

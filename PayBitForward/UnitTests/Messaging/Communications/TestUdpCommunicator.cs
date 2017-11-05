@@ -9,7 +9,7 @@ namespace UnitTests
     [TestFixture]
     public class TestUdpCommunicator
     {
-        JsonMessageConverter<Message> Converter = new JsonMessageConverter<Message>();
+        JsonMessageConverter Converter = new JsonMessageConverter();
 
         IPEndPoint CommEndPoint1 = new IPEndPoint(IPAddress.Loopback, 4000);
 

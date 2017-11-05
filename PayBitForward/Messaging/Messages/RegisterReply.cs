@@ -4,13 +4,9 @@ namespace PayBitForward.Messaging
 {
     public class RegisterReply : Message
     {
-        /// <summary>
-        /// The new process ID given to the process by the registry
-        /// </summary>
-        public Guid ProcessID { get; set; }
-        public RegisterReply(MessageType messageId, Guid convoId, Guid processID) : base(messageId, convoId)
+        public RegisterReply(Guid senderId, Guid convoId, int mesgCount) : base(senderId, convoId, mesgCount)
         {
-            ProcessID = processID;
+            MessageId = MessageType.REGISTER_REPLY;
         }
     }
 }

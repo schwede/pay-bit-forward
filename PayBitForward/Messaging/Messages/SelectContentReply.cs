@@ -11,8 +11,9 @@ namespace PayBitForward.Messaging
         /// </summary>
         public List<SeederInfo> SeederList { get; set; }
 
-        public SelectContentReply(MessageType messageId, Guid convoId, List<SeederInfo> seederList) : base(messageId, convoId)
+        public SelectContentReply(Guid senderId, Guid convoId, int mesgCount, List<SeederInfo> seederList) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.SELECT_CONTENT_REPLY;
             SeederList = seederList;
         }
     }

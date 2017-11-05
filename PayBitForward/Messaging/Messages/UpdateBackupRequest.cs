@@ -16,8 +16,9 @@ namespace PayBitForward.Messaging
         /// </summary>
         public List<ClientChange> ClientChanges { get; set; }
 
-        public UpdateBackupRequest(MessageType messageId, Guid convoId, List<ContentChange> contentChanges, List<ClientChange> clientChanges) : base(messageId, convoId)
+        public UpdateBackupRequest(Guid senderId, Guid convoId, int mesgCount, List<ContentChange> contentChanges, List<ClientChange> clientChanges) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.UPDATE_BACKUP_REQUEST;
             ContentChanges = contentChanges;
             ClientChanges = clientChanges;
         }
