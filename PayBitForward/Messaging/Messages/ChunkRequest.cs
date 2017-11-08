@@ -11,20 +11,21 @@ namespace PayBitForward.Messaging
         public int Index { get; set; }
 
         /// <summary>
-        /// Specifies the hash of the complete file for verification and identification 
+        /// Specifies the chunk size to send in bytes
         /// </summary>
-        public Byte[] ContentHash { get; set; }
+        public int Size { get; set; }
 
         /// <summary>
-        /// Specifies the requester so the seeder knows the origin
+        /// Specifies the hash of the complete file for verification and identification 
         /// </summary>
-        public Guid ProcessID { get; set; }
+        public byte[] ContentHash { get; set; }
 
-        public ChunkRequest(MessageType messageId, Guid convoId, int index, Byte[] contentHash, Guid processID) : base(messageId, convoId)
+        public ChunkRequest(Guid senderId, Guid convoId, int mesgCount, int index, byte[] contentHash, int size) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.CHUNK_REQUEST;
             Index = index;
             ContentHash = contentHash;
-            ProcessID = processID;
+            Size = size;
         }
     }
 }

@@ -4,8 +4,9 @@ namespace PayBitForward.Messaging
 {
     public class RegisterRequest : Message
     {
-        public RegisterRequest(MessageType messageId, Guid convoId) : base(messageId, convoId)
+        public RegisterRequest(Guid senderId, Guid convoId, int mesgCount) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.REGISTER_REQUEST;
         }
     }
 }

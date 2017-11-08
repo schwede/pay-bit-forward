@@ -17,19 +17,14 @@ namespace PayBitForward.Messaging
         /// <summary>
         /// Hash of file being added
         /// </summary>
-        public Byte[] Hash { get; set; }
+        public byte[] Hash { get; set; }
 
-        /// <summary>
-        /// Specifies the requester so the registry knows the origin
-        /// </summary>
-        public Guid ProcessID { get; set; }
-
-        public RegisterContentRequest(MessageType messageId, Guid convoId, string name, int fileSize, Byte[] hash, Guid processID) : base(messageId, convoId)
+        public RegisterContentRequest(Guid senderId, Guid convoId, int mesgCount, string name, int fileSize, byte[] hash, Guid processID) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.REGISTER_CONTENT_REQUEST;
             Name = name;
             FileSize = fileSize;
             Hash = hash;
-            ProcessID = processID;
         }
     }
 }

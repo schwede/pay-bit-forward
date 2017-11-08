@@ -7,8 +7,9 @@ namespace PayBitForward.Messaging
         /// <summary>
         /// Specifies the hash of the complete file for verification and identification
         /// </summary>
-        public Byte[] ContentHash { get; set; }
-        public SelectContentRequest(MessageType messageId, Guid convoId, Byte[] contentHash) : base(messageId, convoId)
+        public byte[] ContentHash { get; set; }
+
+        public SelectContentRequest(Guid senderId, Guid convoId, int mesgCount, byte[] contentHash) : base(senderId, convoId, mesgCount)
         {
             ContentHash = contentHash;
         }

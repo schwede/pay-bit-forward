@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -45,6 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Communications\Conversations\ChunkReceiver.cs" />
+    <Compile Include="Communications\Conversations\ChunkSender.cs" />
+    <Compile Include="Communications\Converser.cs" />
+    <Compile Include="Communications\IConverser.cs" />
+    <Compile Include="Communications\Envelope.cs" />
+    <Compile Include="Communications\INetworkCommunicator.cs" />
+    <Compile Include="Communications\MessageRouter.cs" />
+    <Compile Include="Communications\UdpCommunicator.cs" />
     <Compile Include="Conversions\IMessageConverter.cs" />
     <Compile Include="Conversions\JsonMessageConverter.cs" />
     <Compile Include="Models\ClientChange.cs" />
@@ -69,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="log4net.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

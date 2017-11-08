@@ -8,11 +8,18 @@ namespace PayBitForward.Messaging
         /// <summary>
         /// Contains the raw data for that chunk of the file
         /// </summary>
-        public Byte[] ChunkData { get; set; }
+        public byte[] ChunkData { get; set; }
 
-        public ChunkReply(MessageType messageId, Guid convoId, Byte[] chunkData) : base(messageId, convoId)
+        /// <summary>
+        /// Specifies the byte index so the data can be ordered properly
+        /// </summary>
+        public int Index { get; set; }
+
+        public ChunkReply(Guid senderId, Guid convoId, int mesgCount, byte[] chunkData, int index) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.CHUNK_REPLY;
             ChunkData = chunkData;
+            Index = index;
         }
     }
 }

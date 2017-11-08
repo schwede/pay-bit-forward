@@ -9,8 +9,9 @@ namespace PayBitForward.Messaging
         /// </summary>
         public string StatusInformation { get; set; }
 
-        public Acknowledge(MessageType messageId, Guid convoId, string statusInformation) : base(messageId, convoId)
+        public Acknowledge(Guid senderId, Guid convoId, int mesgCount, string statusInformation) : base(senderId, convoId, mesgCount)
         {
+            MessageId = MessageType.ACKNOWLEDGE;
             StatusInformation = statusInformation;
         }
     }
