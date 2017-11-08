@@ -6,6 +6,8 @@ namespace PayBitForward.Messaging
 {
     public class JsonMessageConverter : IMessageConverter
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(JsonMessageConverter));
+
         public byte[] Serialize(Message message)
         {
             return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
@@ -22,8 +24,12 @@ namespace PayBitForward.Messaging
                     return mesg;
                 case MessageType.ACKNOWLEDGE:
                     return JsonConvert.DeserializeObject<Acknowledge>(str);
+                case MessageType.CHUNK_REQUEST:
+                    return JsonConvert.DeserializeObject<ChunkRequest>(str);
+                case MessageType.CHUNK_REPLY:
+                    return JsonConvert.DeserializeObject<ChunkReply>(str);
                 default:
-                    // Need to log here
+                    Log.ErrorFormat("Can not deserialize bytes with MessageId of {0}", mesg.MessageId);
                     throw new Exception("Can not deserialize bytes");
             }
         }
