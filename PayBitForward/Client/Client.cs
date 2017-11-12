@@ -17,7 +17,7 @@ namespace Client
         public void Start()
         {
             var converter = new JsonMessageConverter();
-            var comm = new UdpCommunicator(new IPEndPoint(IPAddress.Loopback, 4000), converter);
+            var comm = new UdpCommunicator(new IPEndPoint(IPAddress.Any, 4000), converter);
             comm.Start();
             var router = new MessageRouter(comm);
 
