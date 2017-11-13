@@ -18,7 +18,7 @@ namespace Seeder
         public void Start()
         {
             var converter = new JsonMessageConverter();
-            var comm = new UdpCommunicator(new IPEndPoint(IPAddress.Loopback, 4001), converter);
+            var comm = new UdpCommunicator(new IPEndPoint(IPAddress.Any, 4001), converter);
             comm.Start();
             var router = new MessageRouter(comm);
             router.OnConversationRequest += HandleNewConversation;
