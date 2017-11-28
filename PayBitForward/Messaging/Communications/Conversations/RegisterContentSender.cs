@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using PayBitForward.Messaging;
-using PayBitForward.Models;
 
 namespace Messaging.Communications.Conversations
 {
@@ -9,13 +8,13 @@ namespace Messaging.Communications.Conversations
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(RegisterContentSender));
 
-        private Content ContentInfo { get; set; }
-
         private int MessageCount { get; set; }
 
-        public RegisterContentSender(Guid convoId, Content contentInfo) : base(convoId)
+        private Message Request { get; set; }
+
+        public RegisterContentSender(Guid convoId, RegisterContentRequest req) : base(convoId)
         {
-            ContentInfo = contentInfo;
+            Request = req;
         }
 
         protected override void Run()
@@ -31,8 +30,7 @@ namespace Messaging.Communications.Conversations
                 }
 
                 Thread.Sleep(100);
-                var req = new RegisterContentRequest(Guid.NewGuid(), ConversationId, MessageCount, ContentInfo.FileName, ContentInfo.ByteSize, ContentInfo.ContentHash, Guid.NewGuid());
-                RaiseSendMessageEvent(req);
+                RaiseSendMessageEvent(Request);
                 MessageCount++;
 
                 while (IncomingMessages.Count > 0)

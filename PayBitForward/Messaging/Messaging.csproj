@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Communications\Conversations\ChunkReceiver.cs" />
     <Compile Include="Communications\Conversations\ChunkSender.cs" />
+    <Compile Include="Communications\Conversations\RegisterContentReceiver.cs" />
     <Compile Include="Communications\Conversations\RegisterContentSender.cs" />
     <Compile Include="Communications\Converser.cs" />
     <Compile Include="Communications\IConverser.cs" />
@@ -79,12 +80,14 @@
     <Compile Include="Messages\ContentListRequest.cs" />
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Messages\MessageType.cs" />
+    <Compile Include="Persistence\PersistenceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="log4net.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
