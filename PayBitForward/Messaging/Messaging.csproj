@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Communications\Conversations\ChunkReceiver.cs" />
     <Compile Include="Communications\Conversations\ChunkSender.cs" />
+    <Compile Include="Communications\Conversations\RegisterContentSender.cs" />
     <Compile Include="Communications\Converser.cs" />
     <Compile Include="Communications\IConverser.cs" />
     <Compile Include="Communications\Envelope.cs" />
