@@ -21,15 +21,15 @@ namespace PayBitForward.Messaging
         {
             Log.Debug("Started sender");
 
-            while (true)
+            // Only try three times
+            for (var i = 0; i < 3; i++)
             {
                 if (Token.IsCancellationRequested)
                 {
                     Log.Debug("Received request to stop");
-                    return;
+                    break;
                 }
 
-                Thread.Sleep(100);
                 RaiseSendMessageEvent(Request);
                 MessageCount++;
 
@@ -44,12 +44,15 @@ namespace PayBitForward.Messaging
 
                             Log.Info(string.Format("Recevied acknowledge with status: {0}", ack.StatusInformation));
                             CancelSource.Cancel();
-                            RaiseEndConversationEvent();
                             break;
                         }
                     }
                 }
+
+                Thread.Sleep(250);
             }
+
+            RaiseEndConversationEvent();
         }
     }
 }

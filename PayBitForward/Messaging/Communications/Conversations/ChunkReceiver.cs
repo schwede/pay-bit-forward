@@ -35,18 +35,21 @@ namespace PayBitForward.Messaging
         {
             Log.Debug("Started receiver");
 
-            while(true)
+            // Only request all packets five times
+            for(var i = 0; i < 5; i++)
             {
                 if(Token.IsCancellationRequested)
                 {
                     Log.Debug("Received request to stop");
-                    return;
+                    break;
                 }
 
-                Thread.Sleep(100);
-                var chunkReq = new ChunkRequest(Guid.NewGuid(), ConversationId, MessageCount, NeededData.First(), FileInfo.ContentHash, ChunkSize);
-                RaiseSendMessageEvent(chunkReq);
-                MessageCount++;
+                foreach(var data in NeededData)
+                {
+                    var chunkReq = new ChunkRequest(Guid.NewGuid(), ConversationId, MessageCount, data, FileInfo.ContentHash, ChunkSize);
+                    RaiseSendMessageEvent(chunkReq);
+                    MessageCount++;
+                }
 
                 while(IncomingMessages.Count > 0)
                 {
@@ -73,13 +76,17 @@ namespace PayBitForward.Messaging
 
                                     CancelSource.Cancel();
                                     RaiseSendMessageEvent(ack);
-                                    RaiseEndConversationEvent();
+                                    break;
                                 }
                             }
                         }
                     }
                 }
+
+                Thread.Sleep(250);
             }
+            
+            RaiseEndConversationEvent();
         }
     }
 }

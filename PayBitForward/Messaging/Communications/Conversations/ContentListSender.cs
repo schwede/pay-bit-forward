@@ -21,12 +21,13 @@ namespace PayBitForward.Messaging
 
             var persistence = new PersistenceManager();
 
-            while (true)
+            // Only try three times
+            for(var i = 0; i < 3; i++)
             {
                 if (Token.IsCancellationRequested)
                 {
                     Log.Debug("Received request to stop");
-                    return;
+                    break;
                 }
 
                 Thread.Sleep(100);
@@ -50,12 +51,13 @@ namespace PayBitForward.Messaging
                             }
 
                             CancelSource.Cancel();
-                            RaiseEndConversationEvent();
                             break;
                         }
                     }
                 }
             }
+
+            RaiseEndConversationEvent();
         }
     }
 }
