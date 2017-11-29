@@ -14,6 +14,10 @@ namespace PayBitForward.Models
 
         public int ByteSize { get; set; }
 
+        public string Host { get; set; }
+
+        public int Port { get; set; }
+
         public Content()
         {
         }

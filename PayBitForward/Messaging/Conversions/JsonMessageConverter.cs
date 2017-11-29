@@ -28,6 +28,12 @@ namespace PayBitForward.Messaging
                     return JsonConvert.DeserializeObject<ChunkRequest>(str);
                 case MessageType.CHUNK_REPLY:
                     return JsonConvert.DeserializeObject<ChunkReply>(str);
+                case MessageType.REGISTER_CONTENT_REQUEST:
+                    return JsonConvert.DeserializeObject<RegisterContentRequest>(str);
+                case MessageType.CONTENT_LIST_REQUEST:
+                    return JsonConvert.DeserializeObject<ContentListRequest>(str);
+                case MessageType.CONTENT_LIST_REPLY:
+                    return JsonConvert.DeserializeObject<ContentListReply>(str);
                 default:
                     Log.ErrorFormat("Can not deserialize bytes with MessageId of {0}", mesg.MessageId);
                     throw new Exception("Can not deserialize bytes");

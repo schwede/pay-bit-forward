@@ -19,12 +19,24 @@ namespace PayBitForward.Messaging
         /// </summary>
         public byte[] Hash { get; set; }
 
-        public RegisterContentRequest(Guid senderId, Guid convoId, int mesgCount, string name, int fileSize, byte[] hash, Guid processID) : base(senderId, convoId, mesgCount)
+        /// <summary>
+        /// Host to connect to for downloading
+        /// </summary>
+        public string Host { get; set; }
+
+        /// <summary>
+        /// Port to connect to for downloading
+        /// </summary>
+        public int Port { get; set; }
+
+        public RegisterContentRequest(Guid senderId, Guid convoId, int mesgCount, string name, int fileSize, byte[] hash, string host, int port) : base(senderId, convoId, mesgCount)
         {
             MessageId = MessageType.REGISTER_CONTENT_REQUEST;
             Name = name;
             FileSize = fileSize;
             Hash = hash;
+            Host = host;
+            Port = port;
         }
     }
 }
