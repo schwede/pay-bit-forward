@@ -2,7 +2,7 @@
 using System.Threading;
 using PayBitForward.Messaging;
 
-namespace Messaging.Communications.Conversations
+namespace PayBitForward.Messaging
 {
     public class RegisterContentSender : Converser
     {

@@ -21,6 +21,8 @@ namespace Messaging.Communications.Conversations
         {
             Log.Debug("Started receiver");
 
+            var persistence = new PersistenceManager();
+
             while (true)
             {
                 if (Token.IsCancellationRequested)
@@ -39,6 +41,17 @@ namespace Messaging.Communications.Conversations
                             var req = (RegisterContentRequest)mesg;
 
                             Log.Info(string.Format("Registering {0} with host {1} and port {2}", req.Name, req.Host, req.Port));
+                            var content = new Content()
+                            {
+                                ContentHash = req.Hash,
+                                ByteSize = req.FileSize,
+                                FileName = req.Name,
+                                Description = "",
+                                Host = req.Host,
+                                Port = req.Port,
+                                LocalPath = "."
+                            };
+                            persistence.WriteContent(content);
 
                             var ack = new Acknowledge(Guid.NewGuid(), ConversationId, req.MessageCount + 1, "Accepted register content request");
                             CancelSource.Cancel();
