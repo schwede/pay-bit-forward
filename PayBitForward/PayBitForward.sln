@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging", "Messaging\Messaging.csproj", "{69D72BBC-96F4-4CDB-8A48-46A78624EE7C}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{7920B398-3878-4A9A-8287-42C6CAD28942}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seeder", "Seeder\Seeder.csproj", "{65546AF5-0950-4EBD-B044-45AC2B1D7965}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayBitForwardGui", "PayBitForwardGui\PayBitForwardGui.csproj", "{0CB49D48-E7A6-4CB8-8C59-3CB1C5A84481}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +35,15 @@ Global
 		{65546AF5-0950-4EBD-B044-45AC2B1D7965}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65546AF5-0950-4EBD-B044-45AC2B1D7965}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65546AF5-0950-4EBD-B044-45AC2B1D7965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CB49D48-E7A6-4CB8-8C59-3CB1C5A84481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CB49D48-E7A6-4CB8-8C59-3CB1C5A84481}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CB49D48-E7A6-4CB8-8C59-3CB1C5A84481}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CB49D48-E7A6-4CB8-8C59-3CB1C5A84481}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82D6B1C4-2958-4AC4-92FA-E6AEA3555EAB}
 	EndGlobalSection
 EndGlobal
