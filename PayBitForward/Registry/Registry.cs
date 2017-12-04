@@ -68,6 +68,7 @@ namespace Registry
                     };
                     record.Seeders.Add(req.SenderId);
                     ContentList.Add(record);
+                    Console.WriteLine("Added " + req.Name);
                     return new RegisterContentReceiver(msg.ConversationId, content);
                 case MessageType.CONTENT_LIST_REQUEST:
                     break;
@@ -76,7 +77,6 @@ namespace Registry
                 default:
                     break;
             }
-
             return null;
         }
     }
