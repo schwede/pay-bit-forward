@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using PayBitForward.Models;
 
 namespace PayBitForward.Messaging
 {
@@ -10,9 +11,15 @@ namespace PayBitForward.Messaging
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ContentListSender));
 
-        public ContentListSender(Guid convoId) : base(convoId)
-        {
+        private string Query { get; set; }
 
+        public delegate void SearchResults(List<Content> list);
+
+        public event SearchResults OnSearchResults;
+
+        public ContentListSender(Guid convoId, string query) : base(convoId)
+        {
+            Query = query;
         }
 
         protected override void Run()
@@ -30,8 +37,8 @@ namespace PayBitForward.Messaging
                     break;
                 }
 
-                Thread.Sleep(100);
-                var req = new ContentListRequest(Guid.NewGuid(), ConversationId, 0, "");
+                Thread.Sleep(250);
+                var req = new ContentListRequest(Guid.NewGuid(), ConversationId, 0, Query);
                 RaiseSendMessageEvent(req);
 
                 while (IncomingMessages.Count > 0)
@@ -40,15 +47,16 @@ namespace PayBitForward.Messaging
                     if (IncomingMessages.TryDequeue(out mesg))
                     {
                        if(mesg.MessageId == MessageType.CONTENT_LIST_REPLY)
-                        {
-                            
+                        {                            
                             var reply = (ContentListReply)mesg;
 
                             foreach(var content in reply.ContentList)
                             {
                                 // TODO This is read the file on every call
-                                persistence.WriteContent(content);
+                                persistence.WriteContent(content, PersistenceManager.StorageType.Remote);
                             }
+
+                            OnSearchResults?.Invoke(reply.ContentList);
 
                             CancelSource.Cancel();
                             break;

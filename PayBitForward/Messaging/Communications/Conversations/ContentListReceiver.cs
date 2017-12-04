@@ -39,12 +39,12 @@ namespace PayBitForward.Messaging
                         {
                             var req = (ContentListRequest)mesg;
                             var availableContent = persistence.ReadContent();
-                            var reply = new ContentListReply(Guid.NewGuid(), ConversationId, req.MessageCount + 1, availableContent);
+                            var reply = new ContentListReply(Guid.NewGuid(), ConversationId, req.MessageCount + 1, availableContent.LocalContent);
 
                             if (req.ContentQuery != "")
                             {
                                 // String match the filenames and descriptions for searching content
-                                reply.ContentList = availableContent.Where(content => 
+                                reply.ContentList = availableContent.LocalContent.Where(content => 
                                 content.Description.ToLower().Contains(req.ContentQuery)
                                 || content.FileName.ToLower().Contains(req.ContentQuery)).ToList();
                             }

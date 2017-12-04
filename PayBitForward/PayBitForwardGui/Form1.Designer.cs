@@ -47,17 +47,17 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.searchDataGridView = new System.Windows.Forms.DataGridView();
-            this.fileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.byteSizeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.localPathDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contentHashDataGridViewImageColumn = new System.Windows.Forms.DataGridViewImageColumn();
             this.contentBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.searchButton = new System.Windows.Forms.Button();
             this.searchTextBox = new System.Windows.Forms.TextBox();
             this.contentListRequestBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.fileNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.byteSizeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.localPathDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contentHashDataGridViewImageColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fileNameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.localPathDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descriptionDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -207,6 +207,7 @@
             this.seederDataGridView.Name = "seederDataGridView";
             this.seederDataGridView.ReadOnly = true;
             this.seederDataGridView.RowHeadersVisible = false;
+            this.seederDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.seederDataGridView.Size = new System.Drawing.Size(843, 305);
             this.seederDataGridView.TabIndex = 0;
             // 
@@ -304,8 +305,41 @@
             this.searchDataGridView.Name = "searchDataGridView";
             this.searchDataGridView.ReadOnly = true;
             this.searchDataGridView.RowHeadersVisible = false;
+            this.searchDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.searchDataGridView.Size = new System.Drawing.Size(816, 350);
             this.searchDataGridView.TabIndex = 2;
+            // 
+            // contentBindingSource
+            // 
+            this.contentBindingSource.DataSource = typeof(PayBitForward.Models.Content);
+            // 
+            // searchButton
+            // 
+            this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchButton.Location = new System.Drawing.Point(762, 17);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(75, 22);
+            this.searchButton.TabIndex = 1;
+            this.searchButton.Text = "Search";
+            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            // 
+            // searchTextBox
+            // 
+            this.searchTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchTextBox.Location = new System.Drawing.Point(67, 18);
+            this.searchTextBox.Name = "searchTextBox";
+            this.searchTextBox.Size = new System.Drawing.Size(689, 20);
+            this.searchTextBox.TabIndex = 0;
+            // 
+            // contentListRequestBindingSource
+            // 
+            this.contentListRequestBindingSource.DataSource = typeof(PayBitForward.Messaging.ContentListRequest);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // fileNameDataGridViewTextBoxColumn
             // 
@@ -346,38 +380,9 @@
             this.contentHashDataGridViewImageColumn.HeaderText = "ContentHash";
             this.contentHashDataGridViewImageColumn.Name = "contentHashDataGridViewImageColumn";
             this.contentHashDataGridViewImageColumn.ReadOnly = true;
-            // 
-            // contentBindingSource
-            // 
-            this.contentBindingSource.DataSource = typeof(PayBitForward.Models.Content);
-            // 
-            // searchButton
-            // 
-            this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchButton.Location = new System.Drawing.Point(762, 17);
-            this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(75, 22);
-            this.searchButton.TabIndex = 1;
-            this.searchButton.Text = "Search";
-            this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
-            // 
-            // searchTextBox
-            // 
-            this.searchTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchTextBox.Location = new System.Drawing.Point(67, 18);
-            this.searchTextBox.Name = "searchTextBox";
-            this.searchTextBox.Size = new System.Drawing.Size(689, 20);
-            this.searchTextBox.TabIndex = 0;
-            // 
-            // contentListRequestBindingSource
-            // 
-            this.contentListRequestBindingSource.DataSource = typeof(PayBitForward.Messaging.ContentListRequest);
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.contentHashDataGridViewImageColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.contentHashDataGridViewImageColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.contentHashDataGridViewImageColumn.Visible = false;
             // 
             // fileNameDataGridViewTextBoxColumn1
             // 
@@ -410,6 +415,7 @@
             this.contentHashDataGridViewImageColumn1.ReadOnly = true;
             this.contentHashDataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.contentHashDataGridViewImageColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.contentHashDataGridViewImageColumn1.Visible = false;
             // 
             // byteSizeDataGridViewTextBoxColumn1
             // 
@@ -457,11 +463,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.BindingSource contentListRequestBindingSource;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fileNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn byteSizeDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn localPathDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewImageColumn contentHashDataGridViewImageColumn;
         private System.Windows.Forms.BindingSource contentBindingSource;
         private System.Windows.Forms.DataGridView seederDataGridView;
         private System.Windows.Forms.BindingSource contentBindingSource1;
@@ -479,6 +480,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn contentHashDataGridViewImageColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn byteSizeDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fileNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn byteSizeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn localPathDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn contentHashDataGridViewImageColumn;
     }
 }
 

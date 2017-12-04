@@ -51,7 +51,7 @@ namespace PayBitForward.Messaging
                                 Port = req.Port,
                                 LocalPath = "."
                             };
-                            persistence.WriteContent(content);
+                            persistence.WriteContent(content, PersistenceManager.StorageType.Local);
 
                             var ack = new Acknowledge(Guid.NewGuid(), ConversationId, req.MessageCount + 1, "Accepted register content request");
                             CancelSource.Cancel();
