@@ -9,6 +9,8 @@ namespace PayBitForward.Messaging
 {
     public class PersistenceManager
     {
+        public enum StorageType { Local, Remote };
+
         private string FileName { get; set; }
 
         private string FullPath { get; set; }
@@ -19,13 +21,20 @@ namespace PayBitForward.Messaging
             FullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FileName);
         }
 
-        public void WriteContent(Content newContent)
+        public void WriteContent(Content newContent, StorageType t)
         {
-            var serializer = new XmlSerializer(typeof(List<Content>));
+            var serializer = new XmlSerializer(typeof(Database));
 
             var existing = ReadContent();
 
-            existing.Add(newContent);
+            if(t == StorageType.Local)
+            {
+                existing.LocalContent.Add(newContent);
+            }
+            else
+            {
+                existing.RemoteContent.Add(newContent);
+            }
 
             using (var file = new StreamWriter(FullPath))
             {
@@ -33,16 +42,16 @@ namespace PayBitForward.Messaging
             }
         }
 
-        public List<Content> ReadContent()
+        public Database ReadContent()
         {
-            var result = new List<Content>();
-            var serializer = new XmlSerializer(typeof(List<Content>));
+            var result = new Database();
+            var serializer = new XmlSerializer(typeof(Database));
 
             try
             {
                 using (var file = new StreamReader(FullPath))
                 {
-                    result = (List<Content>)serializer.Deserialize(file);
+                  result = (Database)serializer.Deserialize(file);
                 }
             }
             catch(FileNotFoundException)

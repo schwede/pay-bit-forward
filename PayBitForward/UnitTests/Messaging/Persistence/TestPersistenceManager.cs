@@ -27,14 +27,14 @@ namespace UnitTests.Messaging.Persistence
 
             var contentList = persister.ReadContent();
 
-            Assert.AreEqual(0, contentList.Count());
+            Assert.AreEqual(0, contentList.LocalContent.Count());
 
-            persister.WriteContent(content);
+            persister.WriteContent(content, PersistenceManager.StorageType.Local);
 
             contentList = persister.ReadContent();
 
-            Assert.AreEqual(1, contentList.Count());
-            var storedContent = contentList.First();
+            Assert.AreEqual(1, contentList.LocalContent.Count());
+            var storedContent = contentList.LocalContent.First();
 
             Assert.AreEqual(content.ContentHash, storedContent.ContentHash);
             Assert.AreEqual(content.ByteSize, storedContent.ByteSize);

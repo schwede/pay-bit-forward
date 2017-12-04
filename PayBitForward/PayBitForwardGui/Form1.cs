@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using PayBitForward.Models;
 using PayBitForward.Messaging;
@@ -10,18 +11,23 @@ namespace PayBitForwardGui
 {
     public partial class Form1 : Form
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(Form1));
         private PersistenceManager persistenceManager;
         private JsonMessageConverter converter;
         private UdpCommunicator comm;
         private MessageRouter router;
+        private IPEndPoint RegistryEndpoint;
+
         public Form1()
         {
             InitializeComponent();
             seederDataGridView.CellFormatting += formatBytes;
 
+            this.FormClosing += CleanUp;
+
             persistenceManager = new PersistenceManager();
-            seederDataGridView.DataSource = persistenceManager.ReadContent();
-            searchDataGridView.DataSource = persistenceManager.ReadContent();
+            seederDataGridView.DataSource = persistenceManager.ReadContent().LocalContent;
+            searchDataGridView.DataSource = persistenceManager.ReadContent().RemoteContent;
 
             converter = new JsonMessageConverter();
             comm = new UdpCommunicator(new IPEndPoint(IPAddress.Any, 4000), converter);
@@ -29,8 +35,14 @@ namespace PayBitForwardGui
             router = new MessageRouter(comm);
 
             router.OnConversationRequest += HandleNewConversation;
-            //comm.Stop();
-            
+
+            RegistryEndpoint = new IPEndPoint(IPAddress.Parse(Properties.Settings.Default.HostAddress), Properties.Settings.Default.HostPort);
+        }
+
+        private void CleanUp(object sender, FormClosingEventArgs args)
+        {
+            comm.Stop();
+            // Clean up message router
         }
 
         private IConverser HandleNewConversation(PayBitForward.Messaging.Message mesg)
@@ -38,7 +50,7 @@ namespace PayBitForwardGui
             if (mesg.MessageId == MessageType.CHUNK_REQUEST)
             {
                 ChunkRequest chunkReq = mesg as ChunkRequest;
-                foreach(Content content in persistenceManager.ReadContent())
+                foreach(Content content in persistenceManager.ReadContent().LocalContent)
                 {
                     if (content.ContentHash == chunkReq.ContentHash)
                     {
@@ -99,20 +111,16 @@ namespace PayBitForwardGui
                             LocalPath = seedTextBox.Text,
                             Description = descriptionTextBox.Text,
                             ByteSize = (int)file.Length,
-                            ContentHash = sha2.ComputeHash(File.ReadAllBytes(file.FullName))
+                            ContentHash = sha2.ComputeHash(File.ReadAllBytes(file.FullName)),
+                            Host = Properties.Settings.Default.HostAddress,
+                            Port = Properties.Settings.Default.HostPort
                         };
                         
-                        persistenceManager.WriteContent(newContent);
-                        seederDataGridView.DataSource = persistenceManager.ReadContent();
+                        persistenceManager.WriteContent(newContent, PersistenceManager.StorageType.Local);
+                        seederDataGridView.DataSource = persistenceManager.ReadContent().LocalContent;
                         RegisterContentRequest request = new RegisterContentRequest(Guid.NewGuid(), Guid.NewGuid(), 1, newContent.FileName, newContent.ByteSize, newContent.ContentHash, Properties.Settings.Default.HostAddress, Properties.Settings.Default.HostPort);
                         RegisterContentSender contentSender = new RegisterContentSender(request.ConversationId, request);
-                        router.AddConversation(contentSender,new IPEndPoint(IPAddress.Parse(Properties.Settings.Default.HostAddress), Properties.Settings.Default.HostPort));
-
-//<<<<<<< Updated upstream
-                        foreach (var row in seederDataGridView.Rows)
-                        {
-                            
-                        }
+                        router.AddConversation(contentSender, RegistryEndpoint);
                     }
                 }
                 else
@@ -141,7 +149,18 @@ namespace PayBitForwardGui
                             selectedContent.Add(row.DataBoundItem as Content);
                         }
                         foreach (Content file in selectedContent)
+                        {
+
                             Console.WriteLine(file.FileName);
+
+                            // Read local content and search for the selected hash
+                            var contentList = persistenceManager.ReadContent();
+
+                            foreach(var toRequest in contentList.RemoteContent.Where(content => content.ContentHash == file.ContentHash))
+                            {
+
+                            }
+                        }
                         // start a download conversation for each of the selected content in selectedContent
                     }
                     else
@@ -162,8 +181,23 @@ namespace PayBitForwardGui
 
         private void searchButton_Click(object sender, EventArgs e)
         {
-            // use the searchTextBox.Text as the query in a get content list request
-            // update the searchDataGridView with the list of Content objects recieved
+            var convo = new ContentListSender(Guid.NewGuid(), searchTextBox.Text);
+            convo.OnSearchResults += handleSearchResults;
+            router.AddConversation(convo, RegistryEndpoint);            
         }
+
+        private void handleSearchResults(List<Content> list)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new ContentListSender.SearchResults(this.handleSearchResults));
+            }
+            else
+            {
+                searchDataGridView.DataSource = list;
+            }
+
+        }
+
     }
 }

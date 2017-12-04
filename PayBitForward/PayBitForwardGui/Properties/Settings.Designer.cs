@@ -25,7 +25,7 @@ namespace PayBitForwardGui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
         public string HostAddress {
             get {
                 return ((string)(this["HostAddress"]));
@@ -37,7 +37,7 @@ namespace PayBitForwardGui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("4000")]
         public int HostPort {
             get {
                 return ((int)(this["HostPort"]));
