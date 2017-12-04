@@ -44,6 +44,7 @@
     <Compile Include="Messaging\Communications\TestMessageRouter.cs" />
     <Compile Include="Messaging\Communications\TestUdpCommunicator.cs" />
     <Compile Include="Messaging\Conversions\TestJsonMessageConverter.cs" />
+    <Compile Include="Messaging\Persistence\TestPersistenceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
