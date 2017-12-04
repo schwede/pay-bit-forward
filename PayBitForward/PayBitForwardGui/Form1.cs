@@ -3,18 +3,51 @@ using System.IO;
 using System.Windows.Forms;
 using PayBitForward.Models;
 using PayBitForward.Messaging;
+using System.Net;
+using System.Collections.Generic;
 
 namespace PayBitForwardGui
 {
     public partial class Form1 : Form
     {
+        private PersistenceManager persistenceManager;
+        private JsonMessageConverter converter;
+        private UdpCommunicator comm;
+        private MessageRouter router;
         public Form1()
         {
             InitializeComponent();
             seederDataGridView.CellFormatting += formatBytes;
 
-            PersistenceManager persistenceManager = new PersistenceManager();
+            persistenceManager = new PersistenceManager();
             seederDataGridView.DataSource = persistenceManager.ReadContent();
+            searchDataGridView.DataSource = persistenceManager.ReadContent();
+
+            converter = new JsonMessageConverter();
+            comm = new UdpCommunicator(new IPEndPoint(IPAddress.Any, 4000), converter);
+            comm.Start();
+            router = new MessageRouter(comm);
+
+            router.OnConversationRequest += HandleNewConversation;
+            //comm.Stop();
+            
+        }
+
+        private IConverser HandleNewConversation(PayBitForward.Messaging.Message mesg)
+        {
+            if (mesg.MessageId == MessageType.CHUNK_REQUEST)
+            {
+                ChunkRequest chunkReq = mesg as ChunkRequest;
+                foreach(Content content in persistenceManager.ReadContent())
+                {
+                    if (content.ContentHash == chunkReq.ContentHash)
+                    {
+                        return new ChunkSender(content, mesg.ConversationId);
+                    }
+                }
+            }
+
+            throw new Exception("Not found..");
         }
 
         private void formatBytes(object sender, DataGridViewCellFormattingEventArgs args)
@@ -68,18 +101,19 @@ namespace PayBitForwardGui
                             ByteSize = (int)file.Length,
                             ContentHash = sha2.ComputeHash(File.ReadAllBytes(file.FullName))
                         };
-
-                        PersistenceManager persistenceManager = new PersistenceManager();
+                        
                         persistenceManager.WriteContent(newContent);
                         seederDataGridView.DataSource = persistenceManager.ReadContent();
+                        RegisterContentRequest request = new RegisterContentRequest(Guid.NewGuid(), Guid.NewGuid(), 1, newContent.FileName, newContent.ByteSize, newContent.ContentHash, Properties.Settings.Default.HostAddress, Properties.Settings.Default.HostPort);
+                        RegisterContentSender contentSender = new RegisterContentSender(request.ConversationId, request);
+                        router.AddConversation(contentSender,new IPEndPoint(IPAddress.Parse(Properties.Settings.Default.HostAddress), Properties.Settings.Default.HostPort));
 
-                        foreach(var row in seederDataGridView.Rows)
+//<<<<<<< Updated upstream
+                        foreach (var row in seederDataGridView.Rows)
                         {
                             
                         }
                     }
-
-                    // Needs to start seeding the new content.
                 }
                 else
                 {
@@ -99,7 +133,21 @@ namespace PayBitForwardGui
             {
                 if (Directory.Exists(saveTextBox.Text))
                 {
-                    // Start downloading selected Content from seeders
+                    if (searchDataGridView.SelectedRows.Count > 0)
+                    {
+                        List<Content> selectedContent = new List<Content>();
+                        foreach (DataGridViewRow row in searchDataGridView.SelectedRows)
+                        {
+                            selectedContent.Add(row.DataBoundItem as Content);
+                        }
+                        foreach (Content file in selectedContent)
+                            Console.WriteLine(file.FileName);
+                        // start a download conversation for each of the selected content in selectedContent
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed");
+                    }
                 }
                 else
                 {
