@@ -6,6 +6,7 @@ namespace PayBitForward.Models
     {
         public ContentChange()
         {
+
         }
     }
 }

@@ -2,7 +2,7 @@
 using PayBitForward.Messaging;
 using PayBitForward.Models;
 
-namespace Messaging.Communications.Conversations
+namespace PayBitForward.Messaging
 {
     public class RegisterContentReceiver : Converser
     {
