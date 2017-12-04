@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using PayBitForward.Models;
 using PayBitForward.Messaging;
@@ -18,8 +11,24 @@ namespace PayBitForwardGui
         public Form1()
         {
             InitializeComponent();
+            seederDataGridView.CellFormatting += formatBytes;
+
             PersistenceManager persistenceManager = new PersistenceManager();
             seederDataGridView.DataSource = persistenceManager.ReadContent();
+        }
+
+        private void formatBytes(object sender, DataGridViewCellFormattingEventArgs args)
+        {
+            if(args == null || args.Value == null)
+            {
+                return;
+            }
+
+            if(args.Value.GetType() == typeof(byte[]))
+            {
+                var bytes = (byte[])args.Value;
+                args.Value = Convert.ToBase64String(bytes);
+            }
         }
 
         private void searchBrowseButton_Click(object sender, EventArgs e)
@@ -48,20 +57,27 @@ namespace PayBitForwardGui
             {
                 if (File.Exists(seedTextBox.Text))
                 {
-                    FileInfo file = new FileInfo(seedTextBox.Text);
-                    Content newContent = new Content()
+                    using (var sha2 = new System.Security.Cryptography.SHA256Managed())
                     {
-                        FileName = file.Name,
-                        LocalPath = seedTextBox.Text,
-                        Description = descriptionTextBox.Text,
-                        ByteSize = (int) file.Length,
+                        FileInfo file = new FileInfo(seedTextBox.Text);
+                        Content newContent = new Content()
+                        {
+                            FileName = file.Name,
+                            LocalPath = seedTextBox.Text,
+                            Description = descriptionTextBox.Text,
+                            ByteSize = (int)file.Length,
+                            ContentHash = sha2.ComputeHash(File.ReadAllBytes(file.FullName))
+                        };
 
-                        // add files hash
-                    };
+                        PersistenceManager persistenceManager = new PersistenceManager();
+                        persistenceManager.WriteContent(newContent);
+                        seederDataGridView.DataSource = persistenceManager.ReadContent();
 
-                    PersistenceManager persistenceManager = new PersistenceManager();
-                    persistenceManager.WriteContent(newContent);
-                    seederDataGridView.DataSource = persistenceManager.ReadContent();
+                        foreach(var row in seederDataGridView.Rows)
+                        {
+                            
+                        }
+                    }
 
                     // Needs to start seeding the new content.
                 }
