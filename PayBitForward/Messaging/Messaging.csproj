@@ -65,6 +65,7 @@
     <Compile Include="Conversions\JsonMessageConverter.cs" />
     <Compile Include="Models\ClientChange.cs" />
     <Compile Include="Models\ContentChange.cs" />
+    <Compile Include="Models\Database.cs" />
     <Compile Include="Models\SeederInfo.cs" />
     <Compile Include="Messages\RegisterReply.cs" />
     <Compile Include="Messages\RegisterContentRequest.cs" />
