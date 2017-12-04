@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Registry
 {
-  class Program
+  class Registry
   {
     static void Main(string[] args)
     {
