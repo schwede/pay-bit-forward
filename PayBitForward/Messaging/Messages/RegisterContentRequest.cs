@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PayBitForward.Models;
+using System;
 
 namespace PayBitForward.Messaging
 {
@@ -29,14 +30,31 @@ namespace PayBitForward.Messaging
         /// </summary>
         public int Port { get; set; }
 
-        public RegisterContentRequest(Guid senderId, Guid convoId, int mesgCount, string name, int fileSize, byte[] hash, string host, int port) : base(senderId, convoId, mesgCount)
+        /// <summary>
+        /// Discription of file
+        /// </summary>
+        public string Description { get; set; }
+
+        public RegisterContentRequest(Guid senderId, Guid convoId, int mesgCount, string filename, int filesize, Byte[] hash, string host, int port, string description) : base(senderId, convoId, mesgCount)
         {
             MessageId = MessageType.REGISTER_CONTENT_REQUEST;
-            Name = name;
-            FileSize = fileSize;
+            Name = filename;
+            FileSize = filesize;
             Hash = hash;
             Host = host;
             Port = port;
+            Description = description;
+        }
+
+        public RegisterContentRequest(Guid senderId, Guid convoId, int mesgCount, Content content) : base(senderId, convoId, mesgCount)
+        {
+            MessageId = MessageType.REGISTER_CONTENT_REQUEST;
+            Name = content.FileName;
+            FileSize = content.ByteSize;
+            Hash = content.ContentHash;
+            Host = content.Host;
+            Port = content.Port;
+            Description = content.Description;
         }
     }
 }

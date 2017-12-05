@@ -13,7 +13,7 @@ namespace PayBitForward.Models
 
         public int ByteSize { get; set; }
 
-        public List<Guid> Seeders { get; set; }
+        public List<Guid> Seeders { get; set; } = new List<Guid>();
 
         public ContentRecord()
         {

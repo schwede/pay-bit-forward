@@ -21,9 +21,9 @@ namespace Registry
 
         private PersistenceManager Persistence { get; set; }
 
-        private BlockingCollection<ContentRecord> ContentList { get; set; }
+        private BlockingCollection<ContentRecord> ContentList { get; set; } = new BlockingCollection<ContentRecord>();
 
-        private BlockingCollection<Guid> SeederList { get; set; }
+        private BlockingCollection<Guid> SeederList { get; set; } = new BlockingCollection<Guid>();
 
         public Registry()
         {
@@ -49,6 +49,7 @@ namespace Registry
 
         private IConverser handleNewConversation(Message msg)
         {
+            Console.WriteLine("Handling a new conversation");
             switch(msg.MessageId)
             {
                 case MessageType.REGISTER_CONTENT_REQUEST:
@@ -58,14 +59,18 @@ namespace Registry
                         FileName = req.Name,
                         ContentHash = req.Hash,
                         ByteSize = req.FileSize,
+                        Host = req.Host,
+                        Port = req.Port,
+                        Description = req.Description
                     };
                     var record = new ContentRecord()
                     {
                         FileName = req.Name,
-                        // Description = req.Description,
+                        Description = req.Description,
                         ContentHash = req.Hash,
-                        ByteSize = req.FileSize,
+                        ByteSize = req.FileSize                       
                     };
+
                     record.Seeders.Add(req.SenderId);
                     ContentList.Add(record);
                     Console.WriteLine("Added " + req.Name);
