@@ -15,6 +15,7 @@ namespace PayBitForward.Messaging
 
         private string FullPath { get; set; }
 
+
         public PersistenceManager()
         {
             FileName = "db.xml";
@@ -28,8 +29,8 @@ namespace PayBitForward.Messaging
             var existing = ReadContent();
 
             if(t == StorageType.Local)
-            {                
-                if(existing.LocalContent.Where(c => c.ContentHash.SequenceEqual(newContent.ContentHash) 
+            {
+                if (existing.LocalContent.Where(c => c.ContentHash.SequenceEqual(newContent.ContentHash)
                 && c.Host == newContent.Host
                 && c.Port == newContent.Port).Count() == 0)
                 {

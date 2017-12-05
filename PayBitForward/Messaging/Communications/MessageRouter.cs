@@ -18,6 +18,7 @@ namespace PayBitForward.Messaging
         private List<Guid> DeadConversations = new List<Guid>();
 
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(MessageRouter));
+        private readonly object locker = new object();
 
         public MessageRouter(INetworkCommunicator comm)
         {
@@ -57,14 +58,14 @@ namespace PayBitForward.Messaging
                 Log.Info(string.Format("Conversation with id {0} has already ended", env.MessageContent.ConversationId));
                 return;
             }
-
-            if(!Conversers.ContainsKey(env.MessageContent.ConversationId))
+            
+            if (!Conversers.ContainsKey(env.MessageContent.ConversationId))
             {
                 Log.DebugFormat("Conversation with id {0} does not exist; requesting new conversation worker from app", env.MessageContent.ConversationId);
                 var c = OnConversationRequest?.Invoke(env.MessageContent);
 
                 // Make sure we ignore an invalid response
-                if(c == null)
+                if (c == null)
                 {
                     return;
                 }

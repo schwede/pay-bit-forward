@@ -33,6 +33,14 @@ namespace PayBitForward.Messaging
                 RaiseSendMessageEvent(Request);
                 MessageCount++;
 
+                for (int times = 0; times < 10; times++)
+                {
+                    if (IncomingMessages.Count < 1)
+                    {
+                        Thread.Sleep(250);
+                    }
+                }
+
                 while (IncomingMessages.Count > 0)
                 {
                     Message mesg;
@@ -49,7 +57,6 @@ namespace PayBitForward.Messaging
                     }
                 }
 
-                Thread.Sleep(250);
             }
 
             RaiseEndConversationEvent();

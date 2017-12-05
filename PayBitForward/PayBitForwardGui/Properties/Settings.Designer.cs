@@ -12,7 +12,7 @@ namespace PayBitForwardGui.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,7 +25,19 @@ namespace PayBitForwardGui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.16")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        public int RegistryPort {
+            get {
+                return ((int)(this["RegistryPort"]));
+            }
+            set {
+                this["RegistryPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10.0.0.156")]
         public string HostAddress {
             get {
                 return ((string)(this["HostAddress"]));
@@ -37,7 +49,7 @@ namespace PayBitForwardGui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("6000")]
         public int HostPort {
             get {
                 return ((int)(this["HostPort"]));
@@ -49,25 +61,13 @@ namespace PayBitForwardGui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.16")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10.0.0.156")]
         public string RegistryAddress {
             get {
                 return ((string)(this["RegistryAddress"]));
             }
             set {
                 this["RegistryAddress"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
-        public int RegistryPort {
-            get {
-                return ((int)(this["RegistryPort"]));
-            }
-            set {
-                this["RegistryPort"] = value;
             }
         }
     }
