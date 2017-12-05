@@ -114,7 +114,7 @@ namespace PayBitForwardGui
                         Content newContent = new Content()
                         {
                             FileName = file.Name,
-                            LocalPath = seedTextBox.Text,
+                            LocalPath = file.DirectoryName,
                             Description = descriptionTextBox.Text,
                             ByteSize = (int)file.Length,
                             ContentHash = sha2.ComputeHash(File.ReadAllBytes(file.FullName)),
@@ -155,8 +155,6 @@ namespace PayBitForwardGui
                         }
                         foreach (Content file in selectedContent)
                         {
-                            Console.WriteLine(file.FileName);
-
                             // Read local content and search for the selected hash
                             var contentList = persistenceManager.ReadContent();
 

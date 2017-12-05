@@ -28,8 +28,7 @@ namespace PayBitForward.Messaging
             var existing = ReadContent();
 
             if(t == StorageType.Local)
-            {
-                
+            {                
                 if(existing.LocalContent.Where(c => c.ContentHash.SequenceEqual(newContent.ContentHash) 
                 && c.Host == newContent.Host
                 && c.Port == newContent.Port).Count() == 0)
