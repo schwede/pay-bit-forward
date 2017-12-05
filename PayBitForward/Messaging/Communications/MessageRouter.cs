@@ -15,6 +15,8 @@ namespace PayBitForward.Messaging
 
         private Dictionary<Guid, IPEndPoint> EndPoints = new Dictionary<Guid, IPEndPoint>();
 
+        private List<Guid> DeadConversations = new List<Guid>();
+
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(MessageRouter));
 
         public MessageRouter(INetworkCommunicator comm)
@@ -42,6 +44,7 @@ namespace PayBitForward.Messaging
             foreach(var c in Conversers)
             {
                 c.Value.Stop();
+                DeadConversations.Add(c.Key);
             }
 
             Conversers.Clear();
@@ -49,6 +52,12 @@ namespace PayBitForward.Messaging
 
         private void HandleEnvelope(Envelope env)
         {
+            if(DeadConversations.Contains(env.MessageContent.ConversationId))
+            {
+                Log.Info(string.Format("Conversation with id {0} has already ended", env.MessageContent.ConversationId));
+                return;
+            }
+
             if(!Conversers.ContainsKey(env.MessageContent.ConversationId))
             {
                 Log.DebugFormat("Conversation with id {0} does not exist; requesting new conversation worker from app", env.MessageContent.ConversationId);
@@ -85,6 +94,7 @@ namespace PayBitForward.Messaging
 
                 Conversers.Remove(converser.ConversationId);
                 EndPoints.Remove(converser.ConversationId);
+                DeadConversations.Add(converser.ConversationId);
             }
         }
 
