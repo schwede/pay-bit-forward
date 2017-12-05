@@ -30,7 +30,7 @@ namespace PayBitForward.Messaging
             if(t == StorageType.Local)
             {
                 
-                if(existing.LocalContent.Where(c => c.ContentHash == newContent.ContentHash 
+                if(existing.LocalContent.Where(c => c.ContentHash.SequenceEqual(newContent.ContentHash) 
                 && c.Host == newContent.Host
                 && c.Port == newContent.Port).Count() == 0)
                 {
@@ -39,7 +39,7 @@ namespace PayBitForward.Messaging
             }
             else
             {
-                if (existing.RemoteContent.Where(c => c.ContentHash == newContent.ContentHash
+                if (existing.RemoteContent.Where(c => c.ContentHash.SequenceEqual(newContent.ContentHash)
                 && c.Host == newContent.Host
                 && c.Port == newContent.Port).Count() == 0)
                 {

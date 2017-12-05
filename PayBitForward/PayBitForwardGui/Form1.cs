@@ -54,7 +54,7 @@ namespace PayBitForwardGui
                 ChunkRequest chunkReq = mesg as ChunkRequest;
                 foreach(Content content in persistenceManager.ReadContent().LocalContent)
                 {
-                    if (content.ContentHash == chunkReq.ContentHash)
+                    if (content.ContentHash.SequenceEqual(chunkReq.ContentHash))
                     {
                         return new ChunkSender(content, mesg.ConversationId);
                     }
@@ -155,7 +155,6 @@ namespace PayBitForwardGui
                         }
                         foreach (Content file in selectedContent)
                         {
-
                             Console.WriteLine(file.FileName);
 
                             // Read local content and search for the selected hash
