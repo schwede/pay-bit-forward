@@ -17,6 +17,7 @@ namespace PayBitForwardGui
         private UdpCommunicator comm;
         private MessageRouter router;
         private IPEndPoint RegistryEndpoint;
+        private Guid Id;
 
         public Form1()
         {
@@ -57,9 +58,13 @@ namespace PayBitForwardGui
                         return new ChunkSender(content, mesg.ConversationId);
                     }
                 }
+
+                Log.Error("Content not found");
+                throw new Exception("Not found...");
             }
 
-            throw new Exception("Not found..");
+            Log.Error("Conversation and message not recognized.");
+            throw new Exception("Message not recognized");
         }
 
         private void formatBytes(object sender, DataGridViewCellFormattingEventArgs args)
@@ -156,12 +161,31 @@ namespace PayBitForwardGui
                             // Read local content and search for the selected hash
                             var contentList = persistenceManager.ReadContent();
 
-                            foreach(var toRequest in contentList.RemoteContent.Where(content => content.ContentHash == file.ContentHash))
-                            {
+                            var listToSeed = contentList.RemoteContent.Where(content => content.ContentHash == file.ContentHash).Take(5);
 
+                            int numTotalChunks = (int) Math.Ceiling(file.ByteSize / 256.0);
+                            int numPerSeeder = numTotalChunks / listToSeed.Count();
+                            int leftover = numTotalChunks % listToSeed.Count();
+
+                            for (var i = 0; i < listToSeed.Count(); i++)
+                            {
+                                var c = listToSeed.ElementAt(i);
+                                 
+                                var set = new HashSet<int>();
+                                var endIndex = (i + 1) * numPerSeeder;
+                                if (i == listToSeed.Count())
+                                {
+                                    endIndex += leftover;
+                                }
+                                for (var j = i * numPerSeeder; j < endIndex; j++)
+                                {
+                                    set.Add(j);
+                                }
+
+                                var seederConvo = new ChunkReceiver(c, set, Guid.NewGuid());
+                                router.AddConversation(seederConvo, new IPEndPoint(IPAddress.Parse(c.Host), c.Port));
                             }
                         }
-                        // start a download conversation for each of the selected content in selectedContent
                     }
                     else
                     {
@@ -190,7 +214,7 @@ namespace PayBitForwardGui
         {
             if (InvokeRequired)
             {
-                this.Invoke(new ContentListSender.SearchResults(this.handleSearchResults));
+                this.Invoke(new ContentListSender.SearchResults(this.handleSearchResults), list);
             }
             else
             {
