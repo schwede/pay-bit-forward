@@ -118,7 +118,7 @@ namespace PayBitForwardGui
                         
                         persistenceManager.WriteContent(newContent, PersistenceManager.StorageType.Local);
                         seederDataGridView.DataSource = persistenceManager.ReadContent().LocalContent;
-                        RegisterContentRequest request = new RegisterContentRequest(Guid.NewGuid(), Guid.NewGuid(), 0, newContent);
+                        RegisterContentRequest request = new RegisterContentRequest(Guid.NewGuid(), Guid.NewGuid(), 1, newContent);
                         RegisterContentSender contentSender = new RegisterContentSender(request.ConversationId, request);
                         router.AddConversation(contentSender, RegistryEndpoint);
                     }
