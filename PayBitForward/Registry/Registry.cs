@@ -23,10 +23,6 @@ namespace Registry
 
         private PersistenceManager Persistence { get; set; }
 
-        private BlockingCollection<Content> ContentList { get; set; } = new BlockingCollection<Content>();
-
-        private BlockingCollection<Guid> SeederList { get; set; } = new BlockingCollection<Guid>();
-
         public Registry()
         {
             Converter = new JsonMessageConverter();
@@ -65,11 +61,10 @@ namespace Registry
                         Port = req.Port,
                         Description = req.Description
                     };
-                    ContentList.Add(content);
-                    Console.WriteLine("Added " + req.Name);
+                    Log.Info("Added " + req.Name);
                     return new RegisterContentReceiver(msg.ConversationId, content);
                 case MessageType.CONTENT_LIST_REQUEST:
-                    break;
+                    return new ContentListReceiver(msg.ConversationId);
                 case MessageType.REGISTER_REQUEST:
                     break;
                 default:
