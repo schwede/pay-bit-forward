@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
+using System.IO;
 using System.Linq;
 using PayBitForward.Messaging;
 using PayBitForward.Models;
@@ -9,6 +10,17 @@ namespace UnitTests.Messaging.Persistence
     [TestFixture]
     public class TestPersistenceManager
     {
+        [SetUp]
+        public void ResetFiles()
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "db.xml");
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+
         [Test]
         public void TestReadAndWriteContent()
         {
