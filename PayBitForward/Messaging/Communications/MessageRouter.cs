@@ -70,8 +70,7 @@ namespace PayBitForward.Messaging
                 }
 
                 AddConversation(c, env.EndPoint);
-            }
-            
+            }            
 
             Conversers[env.MessageContent.ConversationId].HandleMessage(env.MessageContent);
         }
