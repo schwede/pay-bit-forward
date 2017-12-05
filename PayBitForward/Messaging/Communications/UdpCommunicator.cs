@@ -115,9 +115,15 @@ namespace PayBitForward.Messaging
 
                             if (data.Length > 0)
                             {
-                                // Log.DebugFormat("Received {0} bytes", data.Length);
-                                var message = Converter.DeSerialize(data);
-                                OnEnvelope?.Invoke(new Envelope(message, remoteEndPoint));
+                                try
+                                {
+                                    var message = Converter.DeSerialize(data);
+                                    OnEnvelope?.Invoke(new Envelope(message, remoteEndPoint));
+                                }
+                                catch(Exception ex)
+                                {
+                                    Log.Error(ex.Message);
+                                }
                             }
                         }
                     }

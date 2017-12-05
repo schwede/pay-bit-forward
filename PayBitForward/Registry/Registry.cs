@@ -13,6 +13,8 @@ namespace Registry
 {
     class Registry
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(Registry));
+
         private UdpCommunicator Communicator { get; set; }
 
         private JsonMessageConverter Converter { get; set; }
@@ -34,7 +36,7 @@ namespace Registry
 
         public void Start()
         {
-            Console.WriteLine("Starting Registry on port 5000");
+            Log.Info("Starting Registry on port 5000");
             Communicator.Start();
             Router.OnConversationRequest += handleNewConversation;
             Console.ReadLine();
@@ -49,7 +51,7 @@ namespace Registry
 
         private IConverser handleNewConversation(Message msg)
         {
-            Console.WriteLine("Handling a new conversation");
+            Log.Debug("Handling a new conversation");
             switch(msg.MessageId)
             {
                 case MessageType.REGISTER_CONTENT_REQUEST:
