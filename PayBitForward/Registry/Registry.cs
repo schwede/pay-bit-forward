@@ -21,7 +21,7 @@ namespace Registry
 
         private PersistenceManager Persistence { get; set; }
 
-        private BlockingCollection<ContentRecord> ContentList { get; set; } = new BlockingCollection<ContentRecord>();
+        private BlockingCollection<Content> ContentList { get; set; } = new BlockingCollection<Content>();
 
         private BlockingCollection<Guid> SeederList { get; set; } = new BlockingCollection<Guid>();
 
@@ -63,16 +63,7 @@ namespace Registry
                         Port = req.Port,
                         Description = req.Description
                     };
-                    var record = new ContentRecord()
-                    {
-                        FileName = req.Name,
-                        Description = req.Description,
-                        ContentHash = req.Hash,
-                        ByteSize = req.FileSize                       
-                    };
-
-                    record.Seeders.Add(req.SenderId);
-                    ContentList.Add(record);
+                    ContentList.Add(content);
                     Console.WriteLine("Added " + req.Name);
                     return new RegisterContentReceiver(msg.ConversationId, content);
                 case MessageType.CONTENT_LIST_REQUEST:
