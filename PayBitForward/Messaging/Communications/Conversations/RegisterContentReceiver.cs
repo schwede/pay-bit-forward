@@ -23,12 +23,12 @@ namespace PayBitForward.Messaging
 
             var persistence = new PersistenceManager();
 
-            while (true)
+            for(var i = 0; i < 3; i++)
             {
                 if (Token.IsCancellationRequested)
                 {
                     Log.Debug("Received request to stop");
-                    return;
+                    break;
                 }
 
                 while (IncomingMessages.Count > 0)
@@ -46,7 +46,7 @@ namespace PayBitForward.Messaging
                                 ContentHash = req.Hash,
                                 ByteSize = req.FileSize,
                                 FileName = req.Name,
-                                Description = "",
+                                Description = req.Description,
                                 Host = req.Host,
                                 Port = req.Port,
                                 LocalPath = "."
@@ -56,12 +56,13 @@ namespace PayBitForward.Messaging
                             var ack = new Acknowledge(Guid.NewGuid(), ConversationId, req.MessageCount + 1, "Accepted register content request");
                             CancelSource.Cancel();
                             RaiseSendMessageEvent(ack);
-                            RaiseEndConversationEvent();
                             break;
                         }
                     }
                 }
             }
+
+            RaiseEndConversationEvent();
         }
     }
 }
