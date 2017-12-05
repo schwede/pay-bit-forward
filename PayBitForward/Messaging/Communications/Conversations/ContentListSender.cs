@@ -37,9 +37,10 @@ namespace PayBitForward.Messaging
                     break;
                 }
 
-                Thread.Sleep(250);
                 var req = new ContentListRequest(Guid.NewGuid(), ConversationId, 0, Query);
                 RaiseSendMessageEvent(req);
+
+                Thread.Sleep(250);
 
                 while (IncomingMessages.Count > 0)
                 {
