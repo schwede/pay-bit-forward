@@ -40,7 +40,7 @@ namespace PayBitForward.Messaging
                 var req = new ContentListRequest(Guid.NewGuid(), ConversationId, 0, Query);
                 RaiseSendMessageEvent(req);
 
-                Thread.Sleep(250);
+                Thread.Sleep(500);
 
                 while (IncomingMessages.Count > 0)
                 {

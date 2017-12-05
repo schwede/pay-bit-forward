@@ -36,7 +36,7 @@ namespace PayBitForward.Messaging
             Log.Debug("Started receiver");
 
             // Only request all packets five times
-            for(var i = 0; i < 5; i++)
+            while(true)
             {
                 if(Token.IsCancellationRequested)
                 {
@@ -51,6 +51,8 @@ namespace PayBitForward.Messaging
                     MessageCount++;
                 }
 
+                Thread.Sleep(250);
+
                 while(IncomingMessages.Count > 0)
                 {
                     Message mesg;
@@ -62,14 +64,14 @@ namespace PayBitForward.Messaging
 
                             if (NeededData.Contains(chunkReply.Index))
                             {
-                                DataStore.TryAdd(chunkReply.Index * ChunkSize, chunkReply.ChunkData);
+                                DataStore[chunkReply.Index] = chunkReply.ChunkData;
 
                                 NeededData.Remove(chunkReply.Index);
                                 ReceivedData.Add(chunkReply.Index);
 
                                 if(NeededData.Count == 0)
                                 {
-                                    Log.Info("Download complete");
+                                    Log.Info(string.Format("Conversation complete; Downloaded {0} packets", DataStore.Count));
                                     var ack = new Acknowledge(Guid.NewGuid(), ConversationId, mesg.MessageCount + 1, "Download complete");
 
                                     CancelSource.Cancel();

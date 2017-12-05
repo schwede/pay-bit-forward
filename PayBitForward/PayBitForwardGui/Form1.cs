@@ -19,6 +19,8 @@ namespace PayBitForwardGui
         private MessageRouter router;
         private IPEndPoint RegistryEndpoint;
 
+        private List<FileAssembler> Assemblers = new List<FileAssembler>();
+
         public Form1()
         {
             InitializeComponent();
@@ -45,6 +47,11 @@ namespace PayBitForwardGui
         {
             router.EndAllConversations();
             comm.Stop();
+
+            foreach(var assembler in Assemblers)
+            {
+                assembler.Stop();
+            }
         }
 
         private IConverser HandleNewConversation(PayBitForward.Messaging.Message mesg)
@@ -155,6 +162,9 @@ namespace PayBitForwardGui
                         }
                         foreach (Content file in selectedContent)
                         {
+                            // Set save path
+                            file.LocalPath = saveTextBox.Text;
+
                             // Read local content and search for the selected hash
                             var contentList = persistenceManager.ReadContent();
 
@@ -165,9 +175,12 @@ namespace PayBitForwardGui
                             int leftover = numTotalChunks % listToSeed.Count();
 
                             var dict = new ConcurrentDictionary<int, byte[]>();
+
                             var assembler = new FileAssembler(file, dict);
+                            Assemblers.Add(assembler);
                             assembler.Start();
 
+                            Log.Info(string.Format("Looking for {0} chunks from {1} seeders", numTotalChunks, listToSeed.Count()));
                             for (var i = 0; i < listToSeed.Count(); i++)
                             {
                                 var c = listToSeed.ElementAt(i);

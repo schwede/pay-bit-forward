@@ -55,7 +55,6 @@ namespace PayBitForward.Messaging
         {
             if(DeadConversations.Contains(env.MessageContent.ConversationId))
             {
-                Log.Info(string.Format("Conversation with id {0} has already ended", env.MessageContent.ConversationId));
                 return;
             }
             
