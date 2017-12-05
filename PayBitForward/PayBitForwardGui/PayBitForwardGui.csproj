@@ -68,6 +68,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\PayBitForward.Messaging.ContentListRequest.datasource" />
     <None Include="Properties\DataSources\PayBitForward.Models.Content.datasource" />
