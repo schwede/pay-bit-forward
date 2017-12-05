@@ -6,6 +6,7 @@ using PayBitForward.Models;
 using PayBitForward.Messaging;
 using System.Net;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace PayBitForwardGui
 {
@@ -17,7 +18,6 @@ namespace PayBitForwardGui
         private UdpCommunicator comm;
         private MessageRouter router;
         private IPEndPoint RegistryEndpoint;
-        private Guid Id;
 
         public Form1()
         {
@@ -32,19 +32,19 @@ namespace PayBitForwardGui
             searchDataGridView.DataSource = persistenceManager.ReadContent().RemoteContent;
 
             converter = new JsonMessageConverter();
-            comm = new UdpCommunicator(new IPEndPoint(IPAddress.Any, 4000), converter);
+            comm = new UdpCommunicator(new IPEndPoint(IPAddress.Any, Properties.Settings.Default.HostPort), converter);
             comm.Start();
             router = new MessageRouter(comm);
 
             router.OnConversationRequest += HandleNewConversation;
 
-            RegistryEndpoint = new IPEndPoint(IPAddress.Parse(Properties.Settings.Default.HostAddress), Properties.Settings.Default.HostPort);
+            RegistryEndpoint = new IPEndPoint(IPAddress.Parse(Properties.Settings.Default.RegistryAddress), Properties.Settings.Default.RegistryPort);
         }
 
         private void CleanUp(object sender, FormClosingEventArgs args)
         {
+            router.EndAllConversations();
             comm.Stop();
-            // Clean up message router
         }
 
         private IConverser HandleNewConversation(PayBitForward.Messaging.Message mesg)
@@ -141,8 +141,7 @@ namespace PayBitForwardGui
         }
 
         private void downloadButton_Click(object sender, EventArgs e)
-        {
-           
+        {           
             if (!string.IsNullOrWhiteSpace(saveTextBox.Text))
             {
                 if (Directory.Exists(saveTextBox.Text))
@@ -168,6 +167,10 @@ namespace PayBitForwardGui
                             int numPerSeeder = numTotalChunks / listToSeed.Count();
                             int leftover = numTotalChunks % listToSeed.Count();
 
+                            var dict = new ConcurrentDictionary<int, byte[]>();
+                            var assembler = new FileAssembler(file, dict);
+                            assembler.Start();
+
                             for (var i = 0; i < listToSeed.Count(); i++)
                             {
                                 var c = listToSeed.ElementAt(i);
@@ -183,7 +186,7 @@ namespace PayBitForwardGui
                                     set.Add(j);
                                 }
 
-                                var seederConvo = new ChunkReceiver(c, set, Guid.NewGuid());
+                                var seederConvo = new ChunkReceiver(c, set, dict, Guid.NewGuid());
                                 router.AddConversation(seederConvo, new IPEndPoint(IPAddress.Parse(c.Host), c.Port));
                             }
                         }
@@ -226,8 +229,6 @@ namespace PayBitForwardGui
                 }
                 searchDataGridView.DataSource = list;
             }
-
         }
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -11,11 +12,11 @@ namespace PayBitForward.Messaging
     {
         private Content FileInfo { get; set; }
 
-        private BinaryWriter Stream { get; set;  }
-
         private HashSet<int> NeededData { get; set; }
 
         private HashSet<int> ReceivedData { get; set; } = new HashSet<int>();
+
+        private ConcurrentDictionary<int, byte[]> DataStore { get; set; }
 
         private int ChunkSize { get; set; } = 256;
 
@@ -23,11 +24,10 @@ namespace PayBitForward.Messaging
 
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ChunkReceiver));
 
-        public ChunkReceiver(Content content, HashSet<int> neededData, Guid convoId) : base(convoId)
+        public ChunkReceiver(Content content, HashSet<int> neededData, ConcurrentDictionary<int, byte[]> store, Guid convoId) : base(convoId)
         {
             FileInfo = content;
-            Log.Info("Writing bits.");
-            Stream = new BinaryWriter(File.Open(FileInfo.FileName, FileMode.OpenOrCreate));
+            DataStore = store;
             NeededData = neededData;
         }
 
@@ -62,8 +62,7 @@ namespace PayBitForward.Messaging
 
                             if (NeededData.Contains(chunkReply.Index))
                             {
-                                Stream.Seek(chunkReply.Index * ChunkSize, SeekOrigin.Begin);
-                                Stream.Write(chunkReply.ChunkData);
+                                DataStore.TryAdd(chunkReply.Index * ChunkSize, chunkReply.ChunkData);
 
                                 NeededData.Remove(chunkReply.Index);
                                 ReceivedData.Add(chunkReply.Index);
@@ -72,7 +71,6 @@ namespace PayBitForward.Messaging
                                 {
                                     Log.Info("Download complete");
                                     var ack = new Acknowledge(Guid.NewGuid(), ConversationId, mesg.MessageCount + 1, "Download complete");
-                                    Stream.Close();
 
                                     CancelSource.Cancel();
                                     RaiseSendMessageEvent(ack);

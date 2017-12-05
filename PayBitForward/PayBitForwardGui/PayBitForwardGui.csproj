@@ -88,17 +88,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Client\Client.csproj">
-      <Project>{7920b398-3878-4a9a-8287-42c6cad28942}</Project>
-      <Name>Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Messaging\Messaging.csproj">
       <Project>{69d72bbc-96f4-4cdb-8a48-46a78624ee7c}</Project>
       <Name>Messaging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Seeder\Seeder.csproj">
-      <Project>{65546af5-0950-4ebd-b044-45ac2b1d7965}</Project>
-      <Name>Seeder</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

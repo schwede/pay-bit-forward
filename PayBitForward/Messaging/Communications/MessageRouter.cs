@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace PayBitForward.Messaging
@@ -36,6 +37,16 @@ namespace PayBitForward.Messaging
             converser.Start();
         }
 
+        public void EndAllConversations()
+        {
+            foreach(var c in Conversers)
+            {
+                c.Value.Stop();
+            }
+
+            Conversers.Clear();
+        }
+
         private void HandleEnvelope(Envelope env)
         {
             if(!Conversers.ContainsKey(env.MessageContent.ConversationId))
@@ -51,18 +62,15 @@ namespace PayBitForward.Messaging
 
                 AddConversation(c, env.EndPoint);
             }
+            
 
-            // Log.Debug("Passing message to conversation worker to handle incoming message");
             Conversers[env.MessageContent.ConversationId].HandleMessage(env.MessageContent);
         }
 
         private void HandleMessage(IConverser converser, Message mesg)
         {
-            // Log.Debug("Received a message to send from a conversation worker");
-
             if(EndPoints.ContainsKey(converser.ConversationId))
             {
-                // Log.Debug("Passing message to communicator for transmission");
                 var env = new Envelope(mesg, EndPoints[converser.ConversationId]);
                 Communicator.SendEnvelope(env);
             }
@@ -71,10 +79,13 @@ namespace PayBitForward.Messaging
         private void HandleConversationOver(IConverser converser)
         {
             Log.DebugFormat("Conversation with id {0} signaled that it is finished; stopping conversation", converser.ConversationId);
-            Conversers[converser.ConversationId].Stop();
+            if(Conversers.ContainsKey(converser.ConversationId))
+            {
+                Conversers[converser.ConversationId].Stop();
 
-            Conversers.Remove(converser.ConversationId);
-            EndPoints.Remove(converser.ConversationId);
+                Conversers.Remove(converser.ConversationId);
+                EndPoints.Remove(converser.ConversationId);
+            }
         }
 
         public event RequestNewConversation OnConversationRequest;

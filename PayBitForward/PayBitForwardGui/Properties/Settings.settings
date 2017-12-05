@@ -8,5 +8,11 @@
     <Setting Name="HostPort" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5000</Value>
     </Setting>
+    <Setting Name="RegistryAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.1.16</Value>
+    </Setting>
+    <Setting Name="RegistryPort" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
