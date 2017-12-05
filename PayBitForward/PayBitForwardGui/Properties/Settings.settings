@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="HostAddress" Type="System.String" Scope="User">
-      <Value Profile="(Default)">127.0.0.1</Value>
+      <Value Profile="(Default)">192.168.1.16</Value>
     </Setting>
     <Setting Name="HostPort" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5000</Value>

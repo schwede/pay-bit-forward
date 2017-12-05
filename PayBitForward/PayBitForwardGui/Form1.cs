@@ -27,6 +27,7 @@ namespace PayBitForwardGui
             this.FormClosing += CleanUp;
 
             persistenceManager = new PersistenceManager();
+            persistenceManager.Clear(PersistenceManager.StorageType.Remote);
             seederDataGridView.DataSource = persistenceManager.ReadContent().LocalContent;
             searchDataGridView.DataSource = persistenceManager.ReadContent().RemoteContent;
 
@@ -161,7 +162,7 @@ namespace PayBitForwardGui
                             // Read local content and search for the selected hash
                             var contentList = persistenceManager.ReadContent();
 
-                            var listToSeed = contentList.RemoteContent.Where(content => content.ContentHash == file.ContentHash).Take(5);
+                            var listToSeed = contentList.RemoteContent.Where(content => content.ContentHash.SequenceEqual(file.ContentHash)).Take(5);
 
                             int numTotalChunks = (int) Math.Ceiling(file.ByteSize / 256.0);
                             int numPerSeeder = numTotalChunks / listToSeed.Count();
@@ -218,6 +219,11 @@ namespace PayBitForwardGui
             }
             else
             {
+                persistenceManager.Clear(PersistenceManager.StorageType.Remote);
+                foreach(Content file in list)
+                {
+                    persistenceManager.WriteContent(file, PersistenceManager.StorageType.Remote);
+                }
                 searchDataGridView.DataSource = list;
             }
 

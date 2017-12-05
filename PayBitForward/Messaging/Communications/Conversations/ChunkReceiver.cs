@@ -26,7 +26,7 @@ namespace PayBitForward.Messaging
         public ChunkReceiver(Content content, HashSet<int> neededData, Guid convoId) : base(convoId)
         {
             FileInfo = content;
-
+            Log.Info("Writing bits.");
             Stream = new BinaryWriter(File.Open(FileInfo.FileName, FileMode.OpenOrCreate));
             NeededData = neededData;
         }

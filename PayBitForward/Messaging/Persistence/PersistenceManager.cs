@@ -29,11 +29,22 @@ namespace PayBitForward.Messaging
 
             if(t == StorageType.Local)
             {
-                existing.LocalContent.Add(newContent);
+                
+                if(existing.LocalContent.Where(c => c.ContentHash == newContent.ContentHash 
+                && c.Host == newContent.Host
+                && c.Port == newContent.Port).Count() == 0)
+                {
+                    existing.LocalContent.Add(newContent);
+                }
             }
             else
             {
-                existing.RemoteContent.Add(newContent);
+                if (existing.RemoteContent.Where(c => c.ContentHash == newContent.ContentHash
+                && c.Host == newContent.Host
+                && c.Port == newContent.Port).Count() == 0)
+                {
+                    existing.RemoteContent.Add(newContent);
+                }
             }
 
             using (var file = new StreamWriter(FullPath))
@@ -63,6 +74,26 @@ namespace PayBitForward.Messaging
             }
 
             return result;
+        }
+
+        public void Clear(StorageType t)
+        {
+            var existing = ReadContent();
+            var serializer = new XmlSerializer(typeof(Database));
+
+            if(t == StorageType.Local)
+            {
+                existing.LocalContent = new List<Content>();
+            }
+            else
+            {
+                existing.RemoteContent = new List<Content>();
+            }
+
+            using (var file = new StreamWriter(FullPath))
+            {
+                serializer.Serialize(file, existing);
+            }
         }
     }
 }
