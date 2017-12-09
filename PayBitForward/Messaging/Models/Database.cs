@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace PayBitForward.Models
 {
@@ -8,6 +9,8 @@ namespace PayBitForward.Models
         public List<Content> LocalContent { get; set; }
 
         public List<Content> RemoteContent { get; set; }
+
+        public RSAParameters KeyInfo { get; set; }
 
         public Database()
         {

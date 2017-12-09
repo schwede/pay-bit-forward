@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Security.Cryptography;
 using System.Xml.Serialization;
 using PayBitForward.Models;
 
@@ -9,17 +10,29 @@ namespace PayBitForward.Messaging
 {
     public class PersistenceManager
     {
-        public enum StorageType { Local, Remote };
+        public enum StorageType { Local, Remote, KeyInfo };
 
         private string FileName { get; set; }
 
         private string FullPath { get; set; }
 
-
         public PersistenceManager()
         {
             FileName = "db.xml";
             FullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FileName);
+        }
+
+        public void WriteKeyInfo(RSAParameters rsaParams)
+        {
+            var serializer = new XmlSerializer(typeof(Database));
+
+            var existing = ReadContent();
+            existing.KeyInfo = rsaParams;
+
+            using (var file = new StreamWriter(FullPath))
+            {
+                serializer.Serialize(file, existing);
+            }
         }
 
         public void WriteContent(Content newContent, StorageType t)
@@ -37,7 +50,7 @@ namespace PayBitForward.Messaging
                     existing.LocalContent.Add(newContent);
                 }
             }
-            else
+            else if(t == StorageType.Remote)
             {
                 if (existing.RemoteContent.Where(c => c.ContentHash.SequenceEqual(newContent.ContentHash)
                 && c.Host == newContent.Host
@@ -85,7 +98,7 @@ namespace PayBitForward.Messaging
             {
                 existing.LocalContent = new List<Content>();
             }
-            else
+            else if(t == StorageType.Remote)
             {
                 existing.RemoteContent = new List<Content>();
             }

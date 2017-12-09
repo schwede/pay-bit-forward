@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 
 namespace PayBitForward.Models
 {
@@ -18,10 +19,11 @@ namespace PayBitForward.Models
 
         public int Port { get; set; }
 
-        public byte[] PublicKey { get; set; }
+        public RSAParameters PublicKeyInfo { get; set; }
 
         public Content()
         {
+
         }
     }
 }

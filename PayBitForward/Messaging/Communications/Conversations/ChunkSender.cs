@@ -20,6 +20,8 @@ namespace PayBitForward.Messaging
         {
             Log.Debug("Started sender");
 
+            var persistence = new PersistenceManager();
+
             while (true)
             {
                 if (Token.IsCancellationRequested)
@@ -49,7 +51,12 @@ namespace PayBitForward.Messaging
                                 var bytes = stream.ReadBytes(chunkReq.Size);
 
                                 Log.DebugFormat("Building ChunkReply message for index {0}", chunkReq.Index);
-                                var outMessage = new ChunkReply(Guid.NewGuid(), chunkReq.ConversationId, chunkReq.MessageCount + 1, bytes, chunkReq.Index);
+                                var outMessage = new ChunkReply(Guid.NewGuid(), 
+                                    chunkReq.ConversationId,
+                                    chunkReq.MessageCount + 1,
+                                    bytes,
+                                    chunkReq.Index,
+                                    MessageVerifier.CreateSignature(bytes, persistence.ReadContent().KeyInfo));
                                 RaiseSendMessageEvent(outMessage);
                             }
                             else if (mesg.MessageId == MessageType.ACKNOWLEDGE)
