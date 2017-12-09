@@ -10,7 +10,7 @@ namespace PayBitForward.Models
 
         public List<Content> RemoteContent { get; set; }
 
-        public RSAParameters KeyInfo { get; set; }
+        public string KeyInfo { get; set; }
 
         public Database()
         {
@@ -18,7 +18,7 @@ namespace PayBitForward.Models
             RemoteContent = new List<Content>();
 
             var provider = new RSACryptoServiceProvider();
-            KeyInfo = provider.ExportParameters(true);
+            KeyInfo = provider.ToXmlString(true);
         }
     }
 }

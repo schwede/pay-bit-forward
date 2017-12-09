@@ -22,7 +22,7 @@ namespace PayBitForward.Messaging
             FullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FileName);
         }
 
-        public void WriteKeyInfo(RSAParameters rsaParams)
+        public void WriteKeyInfo(string rsaParams)
         {
             var serializer = new XmlSerializer(typeof(Database));
 

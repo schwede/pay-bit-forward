@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using PayBitForward.Models;
 
 namespace PayBitForward.Messaging
@@ -50,13 +51,16 @@ namespace PayBitForward.Messaging
                                 stream.BaseStream.Seek(chunkReq.Size * chunkReq.Index, SeekOrigin.Begin);
                                 var bytes = stream.ReadBytes(chunkReq.Size);
 
+                                var provider = new RSACryptoServiceProvider();
+                                provider.FromXmlString(persistence.ReadContent().KeyInfo);
+
                                 Log.DebugFormat("Building ChunkReply message for index {0}", chunkReq.Index);
                                 var outMessage = new ChunkReply(Guid.NewGuid(), 
                                     chunkReq.ConversationId,
                                     chunkReq.MessageCount + 1,
                                     bytes,
                                     chunkReq.Index,
-                                    MessageVerifier.CreateSignature(bytes, persistence.ReadContent().KeyInfo));
+                                    MessageVerifier.CreateSignature(bytes, provider.ExportParameters(false)));
                                 RaiseSendMessageEvent(outMessage);
                             }
                             else if (mesg.MessageId == MessageType.ACKNOWLEDGE)
