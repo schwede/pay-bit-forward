@@ -19,7 +19,7 @@ namespace PayBitForward.Models
 
         public int Port { get; set; }
 
-        public RSAParameters PublicKeyInfo { get; set; }
+        public byte[] PublicKeyInfo { get; set; }
 
         public Content()
         {

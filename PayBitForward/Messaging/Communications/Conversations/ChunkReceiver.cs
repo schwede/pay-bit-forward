@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using PayBitForward.Models;
 
@@ -64,7 +65,10 @@ namespace PayBitForward.Messaging
 
                             if (NeededData.Contains(chunkReply.Index))
                             {
-                                if(MessageVerifier.CheckSignature(chunkReply.ChunkData, chunkReply.Signature, FileInfo.PublicKeyInfo))
+                                var provider = new RSACryptoServiceProvider();
+                                provider.ImportCspBlob(FileInfo.PublicKeyInfo);
+
+                                if (MessageVerifier.CheckSignature(chunkReply.ChunkData, chunkReply.Signature, provider.ExportParameters(false)))
                                 {
                                     DataStore[chunkReply.Index] = chunkReply.ChunkData;
 
