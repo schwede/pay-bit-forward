@@ -7,6 +7,7 @@ using PayBitForward.Messaging;
 using System.Net;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Security.Cryptography;
 
 namespace PayBitForwardGui
 {
@@ -115,7 +116,10 @@ namespace PayBitForwardGui
             {
                 if (File.Exists(seedTextBox.Text))
                 {
-                    using (var sha2 = new System.Security.Cryptography.SHA256Managed())
+                    var provider = new RSACryptoServiceProvider();
+                    provider.ImportParameters(persistenceManager.ReadContent().KeyInfo);
+
+                    using (var sha2 = new SHA256Managed())
                     {
                         FileInfo file = new FileInfo(seedTextBox.Text);
                         Content newContent = new Content()
@@ -126,7 +130,8 @@ namespace PayBitForwardGui
                             ByteSize = (int)file.Length,
                             ContentHash = sha2.ComputeHash(File.ReadAllBytes(file.FullName)),
                             Host = Properties.Settings.Default.HostAddress,
-                            Port = Properties.Settings.Default.HostPort
+                            Port = Properties.Settings.Default.HostPort,
+                            PublicKeyInfo = provider.ExportParameters(false)
                         };
                         
                         persistenceManager.WriteContent(newContent, PersistenceManager.StorageType.Local);

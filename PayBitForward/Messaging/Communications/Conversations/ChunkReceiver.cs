@@ -64,19 +64,26 @@ namespace PayBitForward.Messaging
 
                             if (NeededData.Contains(chunkReply.Index))
                             {
-                                DataStore[chunkReply.Index] = chunkReply.ChunkData;
-
-                                NeededData.Remove(chunkReply.Index);
-                                ReceivedData.Add(chunkReply.Index);
-
-                                if(NeededData.Count == 0)
+                                if(MessageVerifier.CheckSignature(chunkReply.ChunkData, chunkReply.Signature, FileInfo.PublicKeyInfo))
                                 {
-                                    Log.Info(string.Format("Conversation complete; Downloaded {0} packets", DataStore.Count));
-                                    var ack = new Acknowledge(Guid.NewGuid(), ConversationId, mesg.MessageCount + 1, "Download complete");
+                                    DataStore[chunkReply.Index] = chunkReply.ChunkData;
 
-                                    CancelSource.Cancel();
-                                    RaiseSendMessageEvent(ack);
-                                    break;
+                                    NeededData.Remove(chunkReply.Index);
+                                    ReceivedData.Add(chunkReply.Index);
+
+                                    if (NeededData.Count == 0)
+                                    {
+                                        Log.Info(string.Format("Conversation complete; Downloaded {0} packets", DataStore.Count));
+                                        var ack = new Acknowledge(Guid.NewGuid(), ConversationId, mesg.MessageCount + 1, "Download complete");
+
+                                        CancelSource.Cancel();
+                                        RaiseSendMessageEvent(ack);
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    Log.Warn("Message signature is NOT verfied");
                                 }
                             }
                         }
