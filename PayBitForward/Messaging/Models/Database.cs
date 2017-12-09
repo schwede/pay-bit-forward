@@ -16,6 +16,9 @@ namespace PayBitForward.Models
         {
             LocalContent = new List<Content>();
             RemoteContent = new List<Content>();
+
+            var provider = new RSACryptoServiceProvider();
+            KeyInfo = provider.ExportParameters(true);
         }
     }
 }
