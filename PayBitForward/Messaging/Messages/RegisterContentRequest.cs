@@ -30,6 +30,8 @@ namespace PayBitForward.Messaging
         /// </summary>
         public int Port { get; set; }
 
+        public byte[] PublicKeyInfo { get; set; }
+
         /// <summary>
         /// Discription of file
         /// </summary>
@@ -40,7 +42,7 @@ namespace PayBitForward.Messaging
 
         }
 
-        public RegisterContentRequest(Guid senderId, Guid convoId, int mesgCount, string filename, int filesize, Byte[] hash, string host, int port, string description) : base(senderId, convoId, mesgCount)
+        public RegisterContentRequest(Guid senderId, Guid convoId, int mesgCount, string filename, int filesize, Byte[] hash, string host, int port, string description, byte[] keyInfo) : base(senderId, convoId, mesgCount)
         {
             Console.WriteLine("Long constructor");
             MessageId = MessageType.REGISTER_CONTENT_REQUEST;
@@ -50,6 +52,7 @@ namespace PayBitForward.Messaging
             Host = host;
             Port = port;
             Description = description;
+            PublicKeyInfo = keyInfo;
         }
 
         public RegisterContentRequest(Guid senderId, Guid convoId, int mesgCount, Content content) : base(senderId, convoId, mesgCount)
@@ -62,6 +65,7 @@ namespace PayBitForward.Messaging
             Host = content.Host;
             Port = content.Port;
             Description = content.Description;
+            PublicKeyInfo = content.PublicKeyInfo;
         }
     }
 }

@@ -49,7 +49,9 @@ namespace PayBitForward.Messaging
                                 Description = req.Description,
                                 Host = req.Host,
                                 Port = req.Port,
-                                LocalPath = "."
+                                LocalPath = ".",
+                                PublicKeyInfo = req.PublicKeyInfo
+                                
                             };
                             persistence.WriteContent(content, PersistenceManager.StorageType.Local);
 

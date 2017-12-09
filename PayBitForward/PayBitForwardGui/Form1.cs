@@ -116,6 +116,9 @@ namespace PayBitForwardGui
             {
                 if (File.Exists(seedTextBox.Text))
                 {
+                    var provider = new RSACryptoServiceProvider();
+                    provider.ImportCspBlob(persistenceManager.ReadContent().KeyInfo);
+
                     using (var sha2 = new SHA256Managed())
                     {
                         FileInfo file = new FileInfo(seedTextBox.Text);
@@ -128,7 +131,7 @@ namespace PayBitForwardGui
                             ContentHash = sha2.ComputeHash(File.ReadAllBytes(file.FullName)),
                             Host = Properties.Settings.Default.HostAddress,
                             Port = Properties.Settings.Default.HostPort,
-                            PublicKeyInfo = persistenceManager.ReadContent().KeyInfo
+                            PublicKeyInfo = provider.ExportCspBlob(false)
                         };
                         
                         persistenceManager.WriteContent(newContent, PersistenceManager.StorageType.Local);
