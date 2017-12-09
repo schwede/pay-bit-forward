@@ -5,7 +5,6 @@ namespace PayBitForward.Messaging
 {
     public class MessageVerifier
     {
-
         static byte[] CreateSignature(byte[] data, RSAParameters rsaParams)
         {
             RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
