@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Security.Cryptography;
 
+
+
 namespace PayBitForward.Messaging
 {
     public class MessageVerifier
     {
-        static byte[] CreateSignature(byte[] data, RSAParameters rsaParams)
+        public static byte[] CreateSignature(byte[] data, RSAParameters rsaParams)
         {
             RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
             provider.ImportParameters(rsaParams);
@@ -14,21 +16,21 @@ namespace PayBitForward.Messaging
 
             formatter.SetHashAlgorithm("SHA2");
 
-            return formatter.CreateSignature(Hash(data));
+            return provider.SignData(data, "SHA256");
         }
 
-        static bool CheckSignature(byte[] data, byte[] sig, RSAParameters rsaParams)
+        public static bool CheckSignature(byte[] data, byte[] sig, RSAParameters rsaParams)
         {
             RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
             provider.ImportParameters(rsaParams);
 
             RSAPKCS1SignatureDeformatter formatter = new RSAPKCS1SignatureDeformatter(provider);
-            formatter.SetHashAlgorithm("SHA2");
+            formatter.SetHashAlgorithm("SHA256");
 
             return formatter.VerifySignature(Hash(data), sig);
         }
 
-        static byte[] Hash(byte[] data)
+        public static byte[] Hash(byte[] data)
         {
             using (var sha2 = new SHA256Managed())
             {
