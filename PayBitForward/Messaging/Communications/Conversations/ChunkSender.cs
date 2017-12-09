@@ -60,7 +60,7 @@ namespace PayBitForward.Messaging
                                     chunkReq.MessageCount + 1,
                                     bytes,
                                     chunkReq.Index,
-                                    MessageVerifier.CreateSignature(bytes, provider.ExportParameters(false)));
+                                    MessageVerifier.CreateSignature(bytes, provider.ExportParameters(true)));
                                 RaiseSendMessageEvent(outMessage);
                             }
                             else if (mesg.MessageId == MessageType.ACKNOWLEDGE)
