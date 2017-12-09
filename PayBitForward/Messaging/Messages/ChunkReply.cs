@@ -15,11 +15,17 @@ namespace PayBitForward.Messaging
         /// </summary>
         public int Index { get; set; }
 
-        public ChunkReply(Guid senderId, Guid convoId, int mesgCount, byte[] chunkData, int index) : base(senderId, convoId, mesgCount)
+        /// <summary>
+        /// Specifies the byte array that includes the cryptographic signature of the ChunkData
+        /// </summary>
+        public byte[] Signature { get; set; }
+
+        public ChunkReply(Guid senderId, Guid convoId, int mesgCount, byte[] chunkData, int index, byte[] signature) : base(senderId, convoId, mesgCount)
         {
             MessageId = MessageType.CHUNK_REPLY;
             ChunkData = chunkData;
             Index = index;
+            Signature = signature;
         }
     }
 }

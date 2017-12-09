@@ -18,6 +18,8 @@ namespace PayBitForward.Models
 
         public int Port { get; set; }
 
+        public byte[] PublicKey { get; set; }
+
         public Content()
         {
         }
