@@ -45,6 +45,7 @@
     <Compile Include="Messaging\Communications\TestUdpCommunicator.cs" />
     <Compile Include="Messaging\Conversions\TestJsonMessageConverter.cs" />
     <Compile Include="Messaging\Persistence\TestPersistenceManager.cs" />
+    <Compile Include="Messaging\Security\TestDigitalSignature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
