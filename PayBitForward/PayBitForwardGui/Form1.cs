@@ -117,7 +117,7 @@ namespace PayBitForwardGui
                 if (File.Exists(seedTextBox.Text))
                 {
                     var provider = new RSACryptoServiceProvider();
-                    provider.FromXmlString(persistenceManager.ReadContent().KeyInfo);
+                    provider.ImportCspBlob(persistenceManager.ReadContent().KeyInfo);
 
                     using (var sha2 = new SHA256Managed())
                     {

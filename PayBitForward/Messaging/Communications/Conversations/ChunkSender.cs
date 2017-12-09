@@ -52,7 +52,7 @@ namespace PayBitForward.Messaging
                                 var bytes = stream.ReadBytes(chunkReq.Size);
 
                                 var provider = new RSACryptoServiceProvider();
-                                provider.FromXmlString(persistence.ReadContent().KeyInfo);
+                                provider.ImportCspBlob(persistence.ReadContent().KeyInfo);
 
                                 Log.DebugFormat("Building ChunkReply message for index {0}", chunkReq.Index);
                                 var outMessage = new ChunkReply(Guid.NewGuid(), 
